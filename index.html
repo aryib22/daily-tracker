@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a1628">
+    <title>Daily Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            background: #0a1628;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1.25rem 1rem;
+            padding-bottom: 140px;
+            color: #f1f5f9;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.25rem;
+            color: #f1f5f9;
+            margin: 1rem 0 2rem 0;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin: 2rem 0 1rem 0;
+            padding: 0 0 0 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.7;
+        }
+
+        h2.deen { color: #d8b4fe; }
+        h2.deen::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+        }
+
+        h2.capture { color: #ffa976; }
+        h2.capture::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E%3C/svg%3E");
+        }
+
+        h2.log { color: #93c5fd; }
+        h2.log::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2393c5fd' stroke-width='1.5'%3E%3Cpolyline points='22 12 18 12 15 21 9 3 6 12 2 12'/%3E%3C/svg%3E");
+        }
+
+        h2.identity { color: #6ee7b7; }
+        h2.identity::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236ee7b7' stroke-width='1.5'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+        }
+
+        h2.reflect { color: #fcd34d; }
+        h2.reflect::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fcd34d' stroke-width='1.5'%3E%3Cline x1='9' y1='18' x2='15' y2='18'/%3E%3Cline x1='10' y1='22' x2='14' y2='22'/%3E%3Cpath d='M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14'/%3E%3C/svg%3E");
+        }
+
+        h2.score { color: #ffa976; }
+        h2.score::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+        }
+
+        .subtitle {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-style: italic;
+            margin: -0.75rem 0 1rem 2rem;
+            opacity: 0.7;
+        }
+
+        .segment-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            display: block;
+        }
+
+        .segment-title.career { color: #d8b4fe; }
+        .segment-title.body { color: #f97316; }
+        .segment-title.build { color: #14b8a6; }
+        .segment-title.bonds { color: #ec4899; }
+
+        .salah-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #1a2e48;
+        }
+
+        .salah-time {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .salah-time:active {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .salah-name {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .salah-emoji {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .salah-guide {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+            margin: 1rem 0 1.25rem 0;
+        }
+
+        .salah-guide-item {
+            padding: 0.75rem 0.5rem;
+            background: #0f1d30;
+            border-radius: 8px;
+            border: 1px solid #1a2e48;
+            font-size: 0.65rem;
+            text-align: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 0 0.9rem 2rem;
+            border-bottom: 1px solid #1a2e48;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.5;
+        }
+
+        .checkbox-item.morning-adhkar::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M17 18a5 5 0 0 0-10 0'/%3E%3Cline x1='12' y1='2' x2='12' y2='9'/%3E%3Cline x1='4.22' y1='10.22' x2='5.64' y2='11.64'/%3E%3Cline x1='1' y1='18' x2='3' y2='18'/%3E%3Cline x1='21' y1='18' x2='23' y2='18'/%3E%3Cline x1='18.36' y1='11.64' x2='19.78' y2='10.22'/%3E%3Cline x1='23' y1='22' x2='1' y2='22'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.evening-adhkar::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3Cline x1='23' y1='22' x2='1' y2='22'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.inbox::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolyline points='21 8 21 21 3 21 3 8'/%3E%3Crect x='1' y='3' width='22' height='5'/%3E%3Cline x1='10' y1='12' x2='14' y2='12'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.plan::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.deepwork::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 1v6M12 17v6M4.22 4.22l4.24 4.25M15.54 15.54l4.24 4.25M1 12h6M17 12h6M4.22 19.78l4.24-4.25M15.54 8.46l4.24-4.25'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.workout::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='1.5'%3E%3Cpath d='M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M9 4v16M15 4v16'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.levela::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpath d='M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z'/%3E%3Ccircle cx='12' cy='14' r='2'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.shipped::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpath d='M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.family::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec4899' stroke-width='1.5'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.worship::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.ships::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpolyline points='9 11 12 14 22 4'/%3E%3Cpath d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/%3E%3C/svg%3E");
+        }
+
+        .checkbox-item.health::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='1.5'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E");
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid #1a2e48;
+            border-radius: 50%;
+            margin-right: 16px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .checkbox.checked {
+            background: #6ee7b7;
+            border-color: #6ee7b7;
+            box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.12);
+        }
+
+        .checkbox.checked::after {
+            content: "✓";
+            color: #0a1628;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .checkbox-label {
+            font-size: 0.85rem;
+            color: #f1f5f9;
+            font-weight: 400;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            background: #0f1d30;
+            border: 1px solid #1a2e48;
+            border-radius: 10px;
+            padding: 0.75rem;
+            color: #f1f5f9;
+            font-size: 0.9rem;
+            font-family: inherit;
+            margin: 0.5rem 0;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .metric-row {
+            padding: 0.9rem 0 0.9rem 1.75rem;
+            border-bottom: 1px solid #1a2e48;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-row::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background: #ffa976;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .metric-label {
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        .metric-value {
+            background: #0f1d30;
+            color: #ffa976;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #1a2e48;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .star {
+            font-size: 2.5rem;
+            cursor: pointer;
+            opacity: 0.2;
+            transition: all 0.2s;
+        }
+
+        .star.active {
+            opacity: 1;
+            color: #fcd34d;
+            transform: scale(1.1);
+        }
+
+        .export-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f1d30;
+            border-top: 1px solid #1a2e48;
+            padding: 1rem;
+            z-index: 200;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #0a1628;
+            color: #f1f5f9;
+            border: 1px solid #1a2e48;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: #0f1d30;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            text-align: center;
+            border: 1px solid #1a2e48;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .toast-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #1a2e48;
+            opacity: 0.2;
+            margin: 2rem 0;
+        }
+
+        .save-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #0f1d30;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #6ee7b7;
+            border: 1px solid #1a2e48;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 150;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="save-indicator" id="saveIndicator">Auto-saved ✓</div>
+
+    <div class="container">
+        <h1 id="currentDate"></h1>
+
+        <!-- DEEN -->
+        <h2 class="deen">DEEN</h2>
+        <div class="subtitle">Foundation first</div>
+
+        <div class="salah-guide">
+            <div class="salah-guide-item">⏰ On time</div>
+            <div class="salah-guide-item">🕌 Masjid</div>
+            <div class="salah-guide-item">⏳ Late</div>
+            <div class="salah-guide-item">❌ Missed</div>
+        </div>
+
+        <div class="salah-status">
+            <div class="salah-time" onclick="cycleSalah('fajr')">
+                <span class="salah-name">Fajr</span>
+                <span class="salah-emoji" id="salah-fajr">—</span>
+            </div>
+            <div class="salah-time" onclick="cycleSalah('dhuhr')">
+                <span class="salah-name">Dhuhr</span>
+                <span class="salah-emoji" id="salah-dhuhr">—</span>
+            </div>
+            <div class="salah-time" onclick="cycleSalah('asr')">
+                <span class="salah-name">Asr</span>
+                <span class="salah-emoji" id="salah-asr">—</span>
+            </div>
+            <div class="salah-time" onclick="cycleSalah('maghrib')">
+                <span class="salah-name">Maghrib</span>
+                <span class="salah-emoji" id="salah-maghrib">—</span>
+            </div>
+            <div class="salah-time" onclick="cycleSalah('isha')">
+                <span class="salah-name">Isha</span>
+                <span class="salah-emoji" id="salah-isha">—</span>
+            </div>
+        </div>
+
+        <div class="metric-row">
+            <span class="metric-label">Qur'an pages</span>
+            <input type="number" class="metric-value" id="quran-pages" placeholder="0" min="0" style="width:80px;">
+        </div>
+
+        <div class="checkbox-item morning-adhkar" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Morning adhkar</span>
+        </div>
+        <div class="checkbox-item evening-adhkar" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Evening adhkar</span>
+        </div>
+
+        <hr>
+
+        <!-- CAPTURE -->
+        <h2 class="capture">CAPTURE</h2>
+        <div class="subtitle">Clear your mind</div>
+
+        <div class="checkbox-item inbox" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Brain dumped to inbox</span>
+        </div>
+        <div class="checkbox-item plan" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Tomorrow planned</span>
+        </div>
+
+        <hr>
+
+        <!-- LOG -->
+        <h2 class="log">LOG</h2>
+        <div class="subtitle">Rapid bullets</div>
+
+        <span class="segment-title career">▸ Career</span>
+        <div class="checkbox-item deepwork" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Deep work hour</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Quality (1-3)</span>
+            <input type="number" class="metric-value" id="work-quality" placeholder="0" min="0" max="3" style="width:80px;">
+        </div>
+
+        <span class="segment-title body">▸ Body</span>
+        <div class="checkbox-item workout" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Workout</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Sleep time</span>
+            <input type="text" class="metric-value" id="sleep-time" placeholder="11:30 PM" style="width:120px;">
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Sleep hours</span>
+            <input type="number" class="metric-value" id="sleep-hours" placeholder="7" min="0" max="24" step="0.5" style="width:80px;">
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Energy (1-3)</span>
+            <input type="number" class="metric-value" id="energy" placeholder="0" min="0" max="3" style="width:80px;">
+        </div>
+
+        <span class="segment-title build">▸ Build</span>
+        <div class="checkbox-item levela" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Levela progress</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Project hours</span>
+            <input type="number" class="metric-value" id="project-hours" placeholder="2" min="0" step="0.5" style="width:80px;">
+        </div>
+        <div class="checkbox-item shipped" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Shipped something</span>
+        </div>
+
+        <span class="segment-title bonds">▸ Bonds</span>
+        <div class="checkbox-item family" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Quality family time</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Family hours</span>
+            <input type="number" class="metric-value" id="family-hours" placeholder="3" min="0" step="0.5" style="width:80px;">
+        </div>
+
+        <hr>
+
+        <!-- IDENTITY -->
+        <h2 class="identity">IDENTITY</h2>
+        <div class="subtitle">Who I'm becoming</div>
+
+        <div class="checkbox-item worship" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Prioritizes worship</span>
+        </div>
+        <div class="checkbox-item ships" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Ships consistently</span>
+        </div>
+        <div class="checkbox-item health" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Protects health</span>
+        </div>
+        <div class="checkbox-item family" onclick="toggleCheckbox(this)">
+            <div class="checkbox"></div>
+            <span class="checkbox-label">Shows up for family</span>
+        </div>
+
+        <hr>
+
+        <!-- REFLECT -->
+        <h2 class="reflect">REFLECT</h2>
+        <div class="subtitle">Clarity</div>
+
+        <div class="metric-label">🏆 Today's win</div>
+        <textarea id="win-today" placeholder="What went well today?"></textarea>
+
+        <div class="metric-label">🎯 Tomorrow's ONE thing</div>
+        <input type="text" id="tomorrow-one-thing" placeholder="What's your top priority tomorrow?">
+
+        <div class="metric-label">💡 Insight/learning</div>
+        <textarea id="insight-learning" placeholder="What did you learn today?"></textarea>
+
+        <hr>
+
+        <!-- SCORE -->
+        <h2 class="score">SCORE</h2>
+        
+        <div class="stars" id="rating-stars">
+            <span class="star" onclick="setRating(1)">★</span>
+            <span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span>
+            <span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+        </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="export-section">
+        <div class="export-buttons">
+            <button class="btn btn-primary" onclick="exportToObsidian()">📋 Copy to Obsidian</button>
+            <button class="btn btn-secondary" onclick="downloadMarkdown()">💾 Download File</button>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">✓</div>
+        <div class="toast-text" id="toast-text">Copied!</div>
+    </div>
+
+    <script>
+        const today = new Date();
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+        const salahEmojis = ['—', '⏰', '🕌', '⏳', '❌'];
+        let salahStates = {fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0};
+
+        function cycleSalah(prayer) {
+            salahStates[prayer] = (salahStates[prayer] + 1) % salahEmojis.length;
+            document.getElementById('salah-' + prayer).textContent = salahEmojis[salahStates[prayer]];
+            saveData();
+        }
+
+        function toggleCheckbox(element) {
+            const checkbox = element.querySelector('.checkbox');
+            checkbox.classList.toggle('checked');
+            saveData();
+        }
+
+        function setRating(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) star.classList.add('active');
+                else star.classList.remove('active');
+            });
+            saveData();
+        }
+
+        let saveTimeout;
+        function saveData() {
+            const data = {
+                date: today.toISOString().split('T')[0],
+                salah_fajr: salahEmojis[salahStates.fajr],
+                salah_dhuhr: salahEmojis[salahStates.dhuhr],
+                salah_asr: salahEmojis[salahStates.asr],
+                salah_maghrib: salahEmojis[salahStates.maghrib],
+                salah_isha: salahEmojis[salahStates.isha],
+                quran_pages: document.getElementById('quran-pages').value || 0,
+                adhkar_morning: document.querySelector('.morning-adhkar .checkbox').classList.contains('checked'),
+                adhkar_evening: document.querySelector('.evening-adhkar .checkbox').classList.contains('checked'),
+                inbox_cleared: document.querySelectorAll('.inbox .checkbox')[0].classList.contains('checked'),
+                tomorrow_planned: document.querySelector('.plan .checkbox').classList.contains('checked'),
+                deep_work: document.querySelector('.deepwork .checkbox').classList.contains('checked'),
+                work_quality: document.getElementById('work-quality').value || 0,
+                workout: document.querySelector('.workout .checkbox').classList.contains('checked'),
+                sleep_time: document.getElementById('sleep-time').value || '',
+                sleep_hours: document.getElementById('sleep-hours').value || 0,
+                energy: document.getElementById('energy').value || 0,
+                levela: document.querySelector('.levela .checkbox').classList.contains('checked'),
+                project_hours: document.getElementById('project-hours').value || 0,
+                shipped: document.querySelector('.shipped .checkbox').classList.contains('checked'),
+                family_time: document.querySelectorAll('.family .checkbox')[0].classList.contains('checked'),
+                family_hours: document.getElementById('family-hours').value || 0,
+                prioritizes_worship: document.querySelector('.worship .checkbox').classList.contains('checked'),
+                ships_consistently: document.querySelector('.ships .checkbox').classList.contains('checked'),
+                protects_health: document.querySelector('.health .checkbox').classList.contains('checked'),
+                shows_up_family: document.querySelectorAll('.family .checkbox')[1].classList.contains('checked'),
+                win_today: document.getElementById('win-today').value || '',
+                tomorrow_one_thing: document.getElementById('tomorrow-one-thing').value || '',
+                insight_learning: document.getElementById('insight-learning').value || '',
+                day_rating: document.querySelectorAll('.star.active').length || 0
+            };
+            
+            localStorage.setItem('daily-tracker', JSON.stringify(data));
+            
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('daily-tracker');
+            if (!saved) return;
+            
+            const data = JSON.parse(saved);
+            
+            // Load salah
+            Object.keys(salahStates).forEach(prayer => {
+                const idx = salahEmojis.indexOf(data['salah_' + prayer]);
+                if (idx !== -1) {
+                    salahStates[prayer] = idx;
+                    document.getElementById('salah-' + prayer).textContent = salahEmojis[idx];
+                }
+            });
+
+            // Load other fields
+            document.getElementById('quran-pages').value = data.quran_pages || '';
+            if (data.adhkar_morning) document.querySelector('.morning-adhkar .checkbox').classList.add('checked');
+            if (data.adhkar_evening) document.querySelector('.evening-adhkar .checkbox').classList.add('checked');
+            if (data.inbox_cleared) document.querySelectorAll('.inbox .checkbox')[0].classList.add('checked');
+            if (data.tomorrow_planned) document.querySelector('.plan .checkbox').classList.add('checked');
+            if (data.deep_work) document.querySelector('.deepwork .checkbox').classList.add('checked');
+            document.getElementById('work-quality').value = data.work_quality || '';
+            if (data.workout) document.querySelector('.workout .checkbox').classList.add('checked');
+            document.getElementById('sleep-time').value = data.sleep_time || '';
+            document.getElementById('sleep-hours').value = data.sleep_hours || '';
+            document.getElementById('energy').value = data.energy || '';
+            if (data.levela) document.querySelector('.levela .checkbox').classList.add('checked');
+            document.getElementById('project-hours').value = data.project_hours || '';
+            if (data.shipped) document.querySelector('.shipped .checkbox').classList.add('checked');
+            if (data.family_time) document.querySelectorAll('.family .checkbox')[0].classList.add('checked');
+            document.getElementById('family-hours').value = data.family_hours || '';
+            if (data.prioritizes_worship) document.querySelector('.worship .checkbox').classList.add('checked');
+            if (data.ships_consistently) document.querySelector('.ships .checkbox').classList.add('checked');
+            if (data.protects_health) document.querySelector('.health .checkbox').classList.add('checked');
+            if (data.shows_up_family) document.querySelectorAll('.family .checkbox')[1].classList.add('checked');
+            document.getElementById('win-today').value = data.win_today || '';
+            document.getElementById('tomorrow-one-thing').value = data.tomorrow_one_thing || '';
+            document.getElementById('insight-learning').value = data.insight_learning || '';
+
+            // Load rating
+            const stars = document.querySelectorAll('.star');
+            for (let i = 0; i < data.day_rating; i++) {
+                stars[i].classList.add('active');
+            }
+        }
+
+        function generateMarkdown() {
+            const saved = localStorage.getItem('daily-tracker');
+            if (!saved) {
+                showToast('⚠️', 'No data to export!');
+                return null;
+            }
+
+            const data = JSON.parse(saved);
+            const dateObj = new Date(data.date);
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+            const monthName = dateObj.toLocaleDateString('en-US', { month: 'long' });
+            const day = dateObj.getDate();
+            const year = dateObj.getFullYear();
+
+            return `---
+date: ${data.date}
+day: ${dayName}
+
+# Deen
+salah_fajr: "${data.salah_fajr}"
+salah_dhuhr: "${data.salah_dhuhr}"
+salah_asr: "${data.salah_asr}"
+salah_maghrib: "${data.salah_maghrib}"
+salah_isha: "${data.salah_isha}"
+quran_pages: ${data.quran_pages}
+quran_reflection: ""
+adhkar_morning: ${data.adhkar_morning}
+adhkar_evening: ${data.adhkar_evening}
+
+# Capture
+inbox_cleared: ${data.inbox_cleared}
+tomorrow_planned: ${data.tomorrow_planned}
+
+# Log
+deep_work: ${data.deep_work}
+work_quality: ${data.work_quality}
+workout: ${data.workout}
+sleep_time: "${data.sleep_time}"
+sleep_hours: ${data.sleep_hours}
+energy: ${data.energy}
+levela: ${data.levela}
+project_hours: ${data.project_hours}
+shipped: ${data.shipped}
+family_time: ${data.family_time}
+family_hours: ${data.family_hours}
+
+# Identity
+prioritizes_worship: ${data.prioritizes_worship}
+ships_consistently: ${data.ships_consistently}
+protects_health: ${data.protects_health}
+shows_up_family: ${data.shows_up_family}
+
+# Reflect
+win_today: "${data.win_today}"
+tomorrow_one_thing: "${data.tomorrow_one_thing}"
+insight_learning: "${data.insight_learning}"
+
+# Score
+day_rating: ${data.day_rating}
+---
+
+# ${dayName}, ${monthName} ${day}, ${year}
+
+---
+
+## 🕌 DEEN
+> *Foundation first*
+
+### Salah Tracker
+**Fajr:** ${data.salah_fajr} | **Dhuhr:** ${data.salah_dhuhr} | **Asr:** ${data.salah_asr} | **Maghrib:** ${data.salah_maghrib} | **Isha:** ${data.salah_isha}
+
+⏰ On time | 🕌 Masjid | ⏳ Late | ❌ Missed
+
+### Qur'an & Adhkar
+- Pages read: ${data.quran_pages}
+
+- [${data.adhkar_morning ? 'x' : ' '}] Morning adhkar
+- [${data.adhkar_evening ? 'x' : ' '}] Evening adhkar
+
+---
+
+## 📥 CAPTURE
+> *Clear your mind*
+
+- [${data.inbox_cleared ? 'x' : ' '}] Brain dumped to inbox
+- [${data.tomorrow_planned ? 'x' : ' '}] Tomorrow planned
+
+---
+
+## 📊 LOG
+> *Rapid bullets*
+
+**▸ Career**
+- [${data.deep_work ? 'x' : ' '}] Deep work hour
+- Quality: ${data.work_quality} ●○○
+
+**▸ Body**
+- [${data.workout ? 'x' : ' '}] Workout
+- Sleep time: ${data.sleep_time}
+- Sleep: ${data.sleep_hours}h
+- Energy: ${data.energy} ●○○
+
+**▸ Build**
+- [${data.levela ? 'x' : ' '}] Levela progress
+- Projects: ${data.project_hours}h
+- [${data.shipped ? 'x' : ' '}] Shipped something
+
+**▸ Bonds**
+- [${data.family_time ? 'x' : ' '}] Quality family time
+- Time: ${data.family_hours}h
+
+---
+
+## 💪 IDENTITY
+> *Who I'm becoming*
+
+Today I was someone who:
+- [${data.prioritizes_worship ? 'x' : ' '}] Prioritizes worship
+- [${data.ships_consistently ? 'x' : ' '}] Ships consistently
+- [${data.protects_health ? 'x' : ' '}] Protects health
+- [${data.shows_up_family ? 'x' : ' '}] Shows up for family
+
+---
+
+## 🤔 REFLECT
+> *Clarity*
+
+**🏆 Today's win:**
+${data.win_today}
+
+**🎯 Tomorrow's ONE thing:**
+${data.tomorrow_one_thing}
+
+**💡 Insight/learning:**
+${data.insight_learning}
+
+---
+
+## ⭐ SCORE
+
+**Day quality:** ${data.day_rating} / 5
+
+---
+
+*Tracked via Daily Tracker PWA*
+`;
+        }
+
+        async function exportToObsidian() {
+            const markdown = generateMarkdown();
+            if (!markdown) return;
+
+            try {
+                await navigator.clipboard.writeText(markdown);
+                showToast('✓', 'Copied!');
+                setTimeout(() => alert('📋 Perfect markdown copied!\n\n1. Open Obsidian\n2. Create/open today\'s note\n3. Paste\n4. Done! Ready for reports ✨'), 500);
+            } catch (err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = markdown;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('✓', 'Copied!');
+            }
+        }
+
+        function downloadMarkdown() {
+            const markdown = generateMarkdown();
+            if (!markdown) return;
+
+            const data = JSON.parse(localStorage.getItem('daily-tracker'));
+            const filename = `${data.date}.md`;
+            const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('💾', 'Downloaded!');
+        }
+
+        function showToast(icon, text) {
+            const toast = document.getElementById('toast');
+            document.querySelector('.toast-icon').textContent = icon;
+            document.getElementById('toast-text').textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Auto-save on input
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', saveData);
+        });
+
+        // Load saved data on page load
+        loadData();
+    </script>
+</body>
+</html>
