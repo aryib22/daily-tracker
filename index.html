@@ -6,705 +6,651 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0a1628">
+    <meta name="theme-color" content="#080f1e">
     <meta name="color-scheme" content="dark">
-    <meta name="supported-color-schemes" content="dark">
     <title>Daily Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --bg:        #080f1e;
+            --bg-card:   #0d1729;
+            --bg-input:  #111e33;
+            --border:    rgba(255,255,255,0.07);
+            --border-md: rgba(255,255,255,0.11);
+            --text-1:    #eef2f7;
+            --text-2:    #8a9bb8;
+            --text-3:    #4a5a72;
+            --accent:    #14b8a6;
+            --c-deen:    #c084fc;
+            --c-capture: #fb923c;
+            --c-log:     #60a5fa;
+            --c-build:   #2dd4bf;
+            --c-bonds:   #f472b6;
+            --c-body:    #fb923c;
+            --c-identity:#6ee7b7;
+            --c-reflect: #fcd34d;
+            --c-score:   #fb923c;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
         }
 
+```
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-    html {
-        background: #0a1628 !important;
-        background-color: #0a1628 !important;
+    html, body {
+        background: var(--bg) !important;
+        background-color: var(--bg) !important;
     }
 
     body {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-        background: #0a1628 !important;
-        background-color: #0a1628 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
+        color: var(--text-1);
         overflow-x: hidden;
     }
 
     .container {
-        max-width: 600px;
+        max-width: 560px;
         margin: 0 auto;
-        padding: 1.25rem 1rem;
-        padding-bottom: 140px;
-        color: #f1f5f9;
+        padding: 0 16px 120px;
     }
 
-    h1 {
-        text-align: center;
-        font-size: 1.25rem;
-        color: #f1f5f9;
-        margin: 1rem 0 2rem 0;
-        font-weight: 500;
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg);
+        padding: 20px 16px 14px;
+        margin: 0 -16px;
+        border-bottom: 1px solid var(--border);
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .header-date {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 2px;
+    }
+
+    .header-day {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-1);
         letter-spacing: -0.02em;
     }
 
-    h2 {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        margin: 2rem 0 1rem 0;
-        padding: 0 0 0 2rem;
-        font-weight: 600;
+    .progress-bar {
+        display: flex;
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .progress-pill {
+        flex: 1;
+        height: 3px;
+        background: var(--border-md);
+        border-radius: 99px;
+        transition: background 0.4s ease;
+    }
+
+    .progress-pill.done { background: var(--accent); }
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-top: 16px;
+        overflow: hidden;
+    }
+
+    .section-header {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        position: relative;
+        gap: 10px;
+        padding: 16px 20px 14px;
+        border-bottom: 1px solid var(--border);
     }
 
-    h2::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 20px;
-        height: 20px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        opacity: 0.7;
-    }
-
-    h2.deen { color: #d8b4fe; }
-    h2.deen::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
-    }
-
-    h2.capture { color: #ffa976; }
-    h2.capture::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E%3C/svg%3E");
-    }
-
-    h2.log { color: #93c5fd; }
-    h2.log::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2393c5fd' stroke-width='1.5'%3E%3Cpolyline points='22 12 18 12 15 21 9 3 6 12 2 12'/%3E%3C/svg%3E");
-    }
-
-    h2.identity { color: #6ee7b7; }
-    h2.identity::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236ee7b7' stroke-width='1.5'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
-    }
-
-    h2.reflect { color: #fcd34d; }
-    h2.reflect::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fcd34d' stroke-width='1.5'%3E%3Cline x1='9' y1='18' x2='15' y2='18'/%3E%3Cline x1='10' y1='22' x2='14' y2='22'/%3E%3Cpath d='M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14'/%3E%3C/svg%3E");
-    }
-
-    h2.score { color: #ffa976; }
-    h2.score::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
-    }
-
-    .subtitle {
-        font-size: 0.7rem;
-        color: #64748b;
-        font-style: italic;
-        margin: -0.75rem 0 1rem 2rem;
-        opacity: 0.7;
-    }
-
-    .segment-title {
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-weight: 600;
-        margin: 1.5rem 0 0.75rem 0;
-        display: block;
-    }
-
-    .segment-title.career { color: #d8b4fe; }
-    .segment-title.body { color: #f97316; }
-    .segment-title.build { color: #14b8a6; }
-    .segment-title.bonds { color: #ec4899; }
-
-    .salah-status {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 1rem;
-        margin: 0 0 1.5rem 0;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid #1a2e48;
-    }
-
-    .salah-time {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        cursor: pointer;
-        padding: 0.5rem;
+    .section-icon {
+        width: 32px;
+        height: 32px;
         border-radius: 8px;
-        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 15px;
     }
 
-    .salah-time:active { background: rgba(255,255,255,0.05); }
-
-    .salah-name {
-        font-size: 0.75rem;
-        color: #cbd5e1;
-        font-weight: 500;
+    .section-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
-    .salah-emoji { font-size: 1.2rem; text-align: center; }
+    .section-sub {
+        font-size: 11px;
+        color: var(--text-3);
+        margin-left: auto;
+        font-weight: 500;
+    }
 
-    .salah-guide {
+    .s-deen     .section-icon { background: rgba(192,132,252,0.12); }
+    .s-deen     .section-title { color: var(--c-deen); }
+    .s-capture  .section-icon { background: rgba(251,146,60,0.12); }
+    .s-capture  .section-title { color: var(--c-capture); }
+    .s-log      .section-icon { background: rgba(96,165,250,0.12); }
+    .s-log      .section-title { color: var(--c-log); }
+    .s-identity .section-icon { background: rgba(110,231,183,0.12); }
+    .s-identity .section-title { color: var(--c-identity); }
+    .s-reflect  .section-icon { background: rgba(252,211,77,0.12); }
+    .s-reflect  .section-title { color: var(--c-reflect); }
+    .s-score    .section-icon { background: rgba(251,146,60,0.12); }
+    .s-score    .section-title { color: var(--c-score); }
+
+    /* ── SALAH ──────────────────────────────────────────────── */
+    .salah-legend {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 0.6rem;
-        margin: 1rem 0 1.25rem 0;
+        gap: 8px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
     }
 
-    .salah-guide-item {
-        padding: 0.75rem 0.5rem;
-        background: #0f1d30;
-        border-radius: 8px;
-        border: 1px solid #1a2e48;
-        font-size: 0.65rem;
+    .legend-item {
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 8px 4px;
+        font-size: 11px;
+        font-weight: 600;
         text-align: center;
-        color: #64748b;
-        font-weight: 500;
+        color: var(--text-3);
     }
 
-    .checkbox-item {
+    .salah-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .salah-cell {
+        padding: 14px 8px;
+        text-align: center;
+        cursor: pointer;
+        border-right: 1px solid var(--border);
+        transition: background 0.15s;
+    }
+
+    .salah-cell:last-child { border-right: none; }
+    .salah-cell:active { background: rgba(255,255,255,0.04); }
+
+    .salah-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 8px;
+    }
+
+    .salah-emoji { font-size: 20px; display: block; }
+
+    /* ── SUB LABEL ──────────────────────────────────────────── */
+    .sub-label {
+        padding: 16px 20px 6px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        border-top: 1px solid var(--border);
+    }
+
+    .sub-label.career { color: var(--c-deen); }
+    .sub-label.body   { color: var(--c-body); }
+    .sub-label.build  { color: var(--c-build); }
+    .sub-label.bonds  { color: var(--c-bonds); }
+
+    /* ── CHECK ROW ──────────────────────────────────────────── */
+    .check-row {
         display: flex;
         align-items: center;
-        padding: 0.9rem 0 0.9rem 2rem;
-        border-bottom: 1px solid #1a2e48;
+        gap: 14px;
+        padding: 15px 20px;
+        border-top: 1px solid var(--border);
         cursor: pointer;
-        position: relative;
+        transition: background 0.15s;
+        min-height: 54px;
     }
 
-    .checkbox-item:last-child { border-bottom: none; }
+    .check-row:active { background: rgba(255,255,255,0.03); }
 
-    .checkbox-item::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 16px;
-        height: 16px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        opacity: 0.5;
-    }
-
-    .checkbox-item.morning-adhkar::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M17 18a5 5 0 0 0-10 0'/%3E%3Cline x1='12' y1='2' x2='12' y2='9'/%3E%3Cline x1='4.22' y1='10.22' x2='5.64' y2='11.64'/%3E%3Cline x1='1' y1='18' x2='3' y2='18'/%3E%3Cline x1='21' y1='18' x2='23' y2='18'/%3E%3Cline x1='18.36' y1='11.64' x2='19.78' y2='10.22'/%3E%3Cline x1='23' y1='22' x2='1' y2='22'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.evening-adhkar::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3Cline x1='23' y1='22' x2='1' y2='22'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.inbox::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Cpolyline points='21 8 21 21 3 21 3 8'/%3E%3Crect x='1' y='3' width='22' height='5'/%3E%3Cline x1='10' y1='12' x2='14' y2='12'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.plan::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffa976' stroke-width='1.5'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.deepwork::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 1v6M12 17v6M4.22 4.22l4.24 4.25M15.54 15.54l4.24 4.25M1 12h6M17 12h6M4.22 19.78l4.24-4.25M15.54 8.46l4.24-4.25'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.workout::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='1.5'%3E%3Cpath d='M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M9 4v16M15 4v16'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.levela::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpath d='M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z'/%3E%3Ccircle cx='12' cy='14' r='2'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.shipped::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpath d='M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.family::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec4899' stroke-width='1.5'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.worship::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8b4fe' stroke-width='1.5'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.ships::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='1.5'%3E%3Cpolyline points='9 11 12 14 22 4'/%3E%3Cpath d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/%3E%3C/svg%3E");
-    }
-
-    .checkbox-item.health::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='1.5'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E");
-    }
-
-    .checkbox {
-        width: 20px;
-        height: 20px;
-        border: 1.5px solid #1a2e48;
+    .check-box {
+        width: 22px;
+        height: 22px;
+        border: 1.5px solid var(--border-md);
         border-radius: 50%;
-        margin-right: 16px;
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
+        transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        background: var(--bg-input);
     }
 
-    .checkbox.checked {
-        background: #6ee7b7;
-        border-color: #6ee7b7;
-        box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.12);
+    .check-box.checked {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(20,184,166,0.15);
+        transform: scale(1.08);
     }
 
-    .checkbox.checked::after {
-        content: "✓";
-        color: #0a1628;
-        font-weight: 600;
-        font-size: 11px;
+    .check-box.checked::after {
+        content: '';
+        display: block;
+        width: 6px;
+        height: 10px;
+        border: 2px solid #080f1e;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg) translateY(-1px);
     }
 
-    .checkbox-label {
-        font-size: 0.85rem;
-        color: #f1f5f9;
-        font-weight: 400;
+    .check-label {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-1);
+        line-height: 1.3;
+        transition: color 0.2s;
     }
 
-    input[type="text"],
-    input[type="number"],
-    textarea {
-        width: 100%;
-        background: #0f1d30;
-        border: 1px solid #1a2e48;
-        border-radius: 10px;
-        padding: 0.75rem;
-        color: #f1f5f9;
-        font-size: 0.9rem;
-        font-family: inherit;
-        margin: 0.5rem 0;
+    .check-row.done-row .check-label {
+        color: var(--text-3);
+        text-decoration: line-through;
     }
 
-    textarea {
-        min-height: 80px;
-        resize: vertical;
-    }
-
+    /* ── METRIC ROW ─────────────────────────────────────────── */
     .metric-row {
-        padding: 0.9rem 0 0.9rem 1.75rem;
-        border-bottom: 1px solid #1a2e48;
-        font-size: 0.85rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        position: relative;
-    }
-
-    .metric-row:last-child { border-bottom: none; }
-
-    .metric-row::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 4px;
-        background: #ffa976;
-        border-radius: 50%;
-        opacity: 0.5;
+        justify-content: space-between;
+        padding: 13px 20px;
+        border-top: 1px solid var(--border);
+        min-height: 54px;
     }
 
     .metric-label {
-        color: #cbd5e1;
+        font-size: 14px;
         font-weight: 500;
-        font-size: 0.8rem;
+        color: var(--text-2);
     }
 
-    .metric-value {
-        background: #0f1d30;
-        color: #ffa976;
-        padding: 0.35rem 0.7rem;
-        border-radius: 6px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        border: 1px solid #1a2e48;
-        min-width: 60px;
+    .metric-input {
+        background: var(--bg-input);
+        border: 1px solid var(--border-md);
+        border-radius: var(--radius-sm);
+        padding: 9px 12px;
+        color: var(--c-capture);
+        font-size: 14px;
+        font-weight: 600;
+        font-family: inherit;
         text-align: center;
+        width: 88px;
+        transition: border-color 0.2s;
     }
 
-    .stars {
+    .metric-input.wide { width: 124px; }
+
+    .metric-input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    /* ── TEXT BLOCKS ────────────────────────────────────────── */
+    .text-block { padding: 4px 16px 16px; }
+
+    .text-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        padding: 16px 4px 8px;
+        display: block;
+    }
+
+    textarea, input[type="text"] {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border-md);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        color: var(--text-1);
+        font-size: 15px;
+        font-family: inherit;
+        font-weight: 400;
+        line-height: 1.5;
+        resize: none;
+        transition: border-color 0.2s;
+    }
+
+    textarea { min-height: 72px; }
+
+    textarea:focus, input[type="text"]:focus {
+        outline: none;
+        border-color: rgba(20,184,166,0.4);
+    }
+
+    textarea::placeholder, input::placeholder { color: var(--text-3); }
+
+    /* ── STARS ──────────────────────────────────────────────── */
+    .stars-wrap {
+        padding: 20px;
         display: flex;
-        gap: 0.5rem;
+        gap: 12px;
         justify-content: center;
-        padding: 2rem 0;
     }
 
     .star {
-        font-size: 2.5rem;
+        font-size: 36px;
         cursor: pointer;
-        opacity: 0.2;
-        transition: all 0.2s;
+        opacity: 0.18;
+        transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+        user-select: none;
     }
 
     .star.active {
         opacity: 1;
         color: #fcd34d;
-        transform: scale(1.1);
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 8px rgba(252,211,77,0.35));
     }
 
-    .export-section {
+    /* ── BOTTOM BAR ─────────────────────────────────────────── */
+    .bottom-bar {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        background: #0f1d30;
-        border-top: 1px solid #1a2e48;
-        padding: 1rem;
+        padding: 12px 16px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        background: rgba(8,15,30,0.96);
+        border-top: 1px solid var(--border);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         z-index: 200;
     }
 
-    .export-buttons {
+    .bottom-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        max-width: 600px;
+        gap: 10px;
+        max-width: 560px;
         margin: 0 auto;
     }
 
     .btn {
-        padding: 1rem;
-        border-radius: 12px;
+        padding: 14px;
+        border-radius: var(--radius-md);
         border: none;
-        font-weight: 600;
-        font-size: 0.9rem;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s;
+        letter-spacing: -0.01em;
+        transition: transform 0.15s, opacity 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #14b8a6, #0d9488);
-        color: white;
-    }
+    .btn:active { transform: scale(0.97); opacity: 0.9; }
+    .btn-primary { background: var(--accent); color: #080f1e; }
+    .btn-secondary { background: var(--bg-card); color: var(--text-1); border: 1px solid var(--border-md); }
 
-    .btn-secondary {
-        background: #0a1628;
-        color: #f1f5f9;
-        border: 1px solid #1a2e48;
-    }
-
-    .btn:active { transform: scale(0.98); }
-
+    /* ── TOAST ──────────────────────────────────────────────── */
     .toast {
         position: fixed;
-        top: 50%;
+        bottom: 90px;
         left: 50%;
-        transform: translate(-50%, -50%) scale(0.9);
-        background: #0f1d30;
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        z-index: 1000;
+        transform: translateX(-50%) translateY(16px);
+        background: var(--bg-card);
+        border: 1px solid var(--border-md);
+        padding: 11px 20px;
+        border-radius: 99px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-1);
+        z-index: 999;
         opacity: 0;
         pointer-events: none;
-        transition: all 0.3s;
-        text-align: center;
-        border: 1px solid #1a2e48;
+        transition: all 0.25s ease;
+        white-space: nowrap;
     }
 
-    .toast.show {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .toast-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-
-    hr {
-        border: none;
-        border-top: 1px solid #1a2e48;
-        opacity: 0.2;
-        margin: 2rem 0;
-    }
-
-    .save-indicator {
+    /* ── SAVE DOT ───────────────────────────────────────────── */
+    .save-dot {
         position: fixed;
-        top: 1rem;
-        right: 1rem;
-        background: #0f1d30;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        color: #6ee7b7;
-        border: 1px solid #1a2e48;
+        top: 18px;
+        right: 16px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
         opacity: 0;
+        z-index: 300;
         transition: opacity 0.3s;
-        z-index: 150;
     }
 
-    .save-indicator.show { opacity: 1; }
+    .save-dot.show { opacity: 1; }
 
-    /* ── NAG SCREEN ─────────────────────────────────────────── */
+    /* ── NAG ────────────────────────────────────────────────── */
     #levela-nag {
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: rgba(10, 18, 40, 0.96);
+        background: rgba(4,8,18,0.94);
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 24px;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
 
     .nag-card {
-        background: #0f1d30;
-        border: 1px solid #1a2e48;
-        border-radius: 20px;
-        padding: 32px 24px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-md);
+        border-radius: var(--radius-lg);
+        padding: 32px 24px 28px;
         max-width: 320px;
         width: 100%;
         text-align: center;
     }
 
-    .nag-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .nag-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
 
     .nag-title {
-        color: #f1f5f9;
-        font-size: 1.1rem;
-        font-weight: 600;
+        color: var(--text-1);
+        font-size: 18px;
+        font-weight: 700;
         margin: 0 0 6px;
-        letter-spacing: normal;
-        text-transform: none;
-        padding: 0;
+        letter-spacing: -0.02em;
     }
 
-    .nag-title::before { display: none !important; }
+    .nag-sub { color: var(--text-3); font-size: 13px; margin: 0 0 20px; line-height: 1.5; }
 
-    .nag-sub {
-        color: #64748b;
-        font-size: 0.8rem;
-        margin: 0 0 20px;
-        line-height: 1.5;
-    }
-
-    .nag-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
+    .nag-list { list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; }
 
     .nag-item {
-        background: #162840;
-        border: 1px solid #1a2e48;
-        border-radius: 10px;
-        padding: 10px 16px;
-        color: #ffa976;
-        font-size: 0.9rem;
-        font-weight: 500;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 11px 16px;
+        color: var(--c-capture);
+        font-size: 14px;
+        font-weight: 600;
     }
 
     .nag-btn {
         width: 100%;
-        background: linear-gradient(135deg, #14b8a6, #0d9488);
-        color: white;
+        background: var(--accent);
+        color: #080f1e;
         border: none;
-        border-radius: 12px;
-        padding: 14px;
-        font-size: 0.95rem;
-        font-weight: 600;
+        border-radius: var(--radius-md);
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
         cursor: pointer;
         font-family: inherit;
+        letter-spacing: -0.01em;
     }
 
-    .nag-btn:active { transform: scale(0.98); }
+    .nag-btn:active { opacity: 0.85; }
 </style>
 ```
 
 </head>
 <body>
-    <div class="save-indicator" id="saveIndicator">Auto-saved ✓</div>
+
+<div class="save-dot" id="saveDot"></div>
+
+<div style="position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);">
+    <div style="max-width:560px;margin:0 auto;padding:20px 16px 14px;">
+        <div class="header-date" id="headerDate"></div>
+        <div class="header-day" id="headerDay"></div>
+        <div class="progress-bar">
+            <div class="progress-pill" id="p-deen"></div>
+            <div class="progress-pill" id="p-career"></div>
+            <div class="progress-pill" id="p-body"></div>
+            <div class="progress-pill" id="p-build"></div>
+            <div class="progress-pill" id="p-bonds"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
 
 ```
-<div class="container">
-    <h1 id="currentDate"></h1>
-
-    <!-- DEEN -->
-    <h2 class="deen">DEEN</h2>
-    <div class="subtitle">Foundation first</div>
-
-    <div class="salah-guide">
-        <div class="salah-guide-item">⏰ On time</div>
-        <div class="salah-guide-item">🕌 Masjid</div>
-        <div class="salah-guide-item">⏳ Late</div>
-        <div class="salah-guide-item">❌ Missed</div>
+<!-- DEEN -->
+<div class="section s-deen">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        <span class="section-title">Deen</span>
+        <span class="section-sub">Foundation first</span>
     </div>
-
-    <div class="salah-status">
-        <div class="salah-time" onclick="cycleSalah('fajr')">
-            <span class="salah-name">Fajr</span>
-            <span class="salah-emoji" id="salah-fajr">—</span>
-        </div>
-        <div class="salah-time" onclick="cycleSalah('dhuhr')">
-            <span class="salah-name">Dhuhr</span>
-            <span class="salah-emoji" id="salah-dhuhr">—</span>
-        </div>
-        <div class="salah-time" onclick="cycleSalah('asr')">
-            <span class="salah-name">Asr</span>
-            <span class="salah-emoji" id="salah-asr">—</span>
-        </div>
-        <div class="salah-time" onclick="cycleSalah('maghrib')">
-            <span class="salah-name">Maghrib</span>
-            <span class="salah-emoji" id="salah-maghrib">—</span>
-        </div>
-        <div class="salah-time" onclick="cycleSalah('isha')">
-            <span class="salah-name">Isha</span>
-            <span class="salah-emoji" id="salah-isha">—</span>
-        </div>
+    <div class="salah-legend">
+        <div class="legend-item">⏰ On time</div>
+        <div class="legend-item">🕌 Masjid</div>
+        <div class="legend-item">⏳ Late</div>
+        <div class="legend-item">❌ Missed</div>
     </div>
-
+    <div class="salah-grid">
+        <div class="salah-cell" onclick="cycleSalah('fajr')"><div class="salah-label">Fajr</div><span class="salah-emoji" id="salah-fajr">—</span></div>
+        <div class="salah-cell" onclick="cycleSalah('dhuhr')"><div class="salah-label">Dhuhr</div><span class="salah-emoji" id="salah-dhuhr">—</span></div>
+        <div class="salah-cell" onclick="cycleSalah('asr')"><div class="salah-label">Asr</div><span class="salah-emoji" id="salah-asr">—</span></div>
+        <div class="salah-cell" onclick="cycleSalah('maghrib')"><div class="salah-label">Maghrib</div><span class="salah-emoji" id="salah-maghrib">—</span></div>
+        <div class="salah-cell" onclick="cycleSalah('isha')"><div class="salah-label">Isha</div><span class="salah-emoji" id="salah-isha">—</span></div>
+    </div>
     <div class="metric-row">
         <span class="metric-label">Qur'an pages</span>
-        <input type="number" class="metric-value" id="quran-pages" placeholder="0" min="0" style="width:80px;">
+        <input type="number" class="metric-input" id="quran-pages" placeholder="0" min="0">
+    </div>
+    <div class="check-row" onclick="toggleCheck(this,'deen')"><div class="check-box"></div><span class="check-label">Morning adhkar</span></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Evening adhkar</span></div>
+</div>
+
+<!-- CAPTURE -->
+<div class="section s-capture">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+        <span class="section-title">Capture</span>
+        <span class="section-sub">Clear your mind</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Brain dumped to inbox</span></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Tomorrow planned</span></div>
+</div>
+
+<!-- LOG -->
+<div class="section s-log">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <span class="section-title">Log</span>
+        <span class="section-sub">Rapid bullets</span>
     </div>
 
-    <div class="checkbox-item morning-adhkar" onclick="toggleCheckbox(this, 'deen')">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Morning adhkar</span>
+    <span class="sub-label career">▸ Career</span>
+    <div class="check-row" onclick="toggleCheck(this,'career')"><div class="check-box"></div><span class="check-label">Deep work hour</span></div>
+    <div class="metric-row"><span class="metric-label">Quality (1–3)</span><input type="number" class="metric-input" id="work-quality" placeholder="0" min="0" max="3"></div>
+
+    <span class="sub-label body">▸ Body</span>
+    <div class="check-row" onclick="toggleCheck(this,'body')"><div class="check-box"></div><span class="check-label">Workout</span></div>
+    <div class="metric-row"><span class="metric-label">Sleep time</span><input type="text" class="metric-input wide" id="sleep-time" placeholder="11:30 PM"></div>
+    <div class="metric-row"><span class="metric-label">Sleep hours</span><input type="number" class="metric-input" id="sleep-hours" placeholder="7" min="0" max="24" step="0.5"></div>
+    <div class="metric-row"><span class="metric-label">Energy (1–3)</span><input type="number" class="metric-input" id="energy" placeholder="0" min="0" max="3"></div>
+
+    <span class="sub-label build">▸ Build</span>
+    <div class="check-row" onclick="toggleCheck(this,'build')"><div class="check-box"></div><span class="check-label">Levela progress</span></div>
+    <div class="metric-row"><span class="metric-label">Project hours</span><input type="number" class="metric-input" id="project-hours" placeholder="2" min="0" step="0.5"></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shipped something</span></div>
+
+    <span class="sub-label bonds">▸ Bonds</span>
+    <div class="check-row" onclick="toggleCheck(this,'bonds')"><div class="check-box"></div><span class="check-label">Quality family time</span></div>
+    <div class="metric-row"><span class="metric-label">Family hours</span><input type="number" class="metric-input" id="family-hours" placeholder="3" min="0" step="0.5"></div>
+</div>
+
+<!-- IDENTITY -->
+<div class="section s-identity">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="section-title">Identity</span>
+        <span class="section-sub">Who I'm becoming</span>
     </div>
-    <div class="checkbox-item evening-adhkar" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Evening adhkar</span>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Prioritises worship</span></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Ships consistently</span></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Protects health</span></div>
+    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shows up for family</span></div>
+</div>
+
+<!-- REFLECT -->
+<div class="section s-reflect">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+        <span class="section-title">Reflect</span>
+        <span class="section-sub">Clarity</span>
     </div>
-
-    <hr>
-
-    <!-- CAPTURE -->
-    <h2 class="capture">CAPTURE</h2>
-    <div class="subtitle">Clear your mind</div>
-
-    <div class="checkbox-item inbox" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Brain dumped to inbox</span>
+    <div class="text-block">
+        <span class="text-label">🏆 Today's win</span>
+        <textarea id="win-today" placeholder="What went well today?"></textarea>
+        <span class="text-label">🎯 Tomorrow's ONE thing</span>
+        <input type="text" id="tomorrow-one-thing" placeholder="Your top priority tomorrow">
+        <span class="text-label">💡 Insight / learning</span>
+        <textarea id="insight-learning" placeholder="What did you learn today?"></textarea>
     </div>
-    <div class="checkbox-item plan" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Tomorrow planned</span>
+</div>
+
+<!-- SCORE -->
+<div class="section s-score">
+    <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <span class="section-title">Score</span>
+        <span class="section-sub">Rate your day</span>
     </div>
-
-    <hr>
-
-    <!-- LOG -->
-    <h2 class="log">LOG</h2>
-    <div class="subtitle">Rapid bullets</div>
-
-    <span class="segment-title career">▸ Career</span>
-    <div class="checkbox-item deepwork" onclick="toggleCheckbox(this, 'career')">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Deep work hour</span>
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Quality (1-3)</span>
-        <input type="number" class="metric-value" id="work-quality" placeholder="0" min="0" max="3" style="width:80px;">
-    </div>
-
-    <span class="segment-title body">▸ Body</span>
-    <div class="checkbox-item workout" onclick="toggleCheckbox(this, 'body')">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Workout</span>
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Sleep time</span>
-        <input type="text" class="metric-value" id="sleep-time" placeholder="11:30 PM" style="width:120px;">
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Sleep hours</span>
-        <input type="number" class="metric-value" id="sleep-hours" placeholder="7" min="0" max="24" step="0.5" style="width:80px;">
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Energy (1-3)</span>
-        <input type="number" class="metric-value" id="energy" placeholder="0" min="0" max="3" style="width:80px;">
-    </div>
-
-    <span class="segment-title build">▸ Build</span>
-    <div class="checkbox-item levela" onclick="toggleCheckbox(this, 'build')">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Levela progress</span>
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Project hours</span>
-        <input type="number" class="metric-value" id="project-hours" placeholder="2" min="0" step="0.5" style="width:80px;">
-    </div>
-    <div class="checkbox-item shipped" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Shipped something</span>
-    </div>
-
-    <span class="segment-title bonds">▸ Bonds</span>
-    <div class="checkbox-item family" onclick="toggleCheckbox(this, 'bonds')">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Quality family time</span>
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Family hours</span>
-        <input type="number" class="metric-value" id="family-hours" placeholder="3" min="0" step="0.5" style="width:80px;">
-    </div>
-
-    <hr>
-
-    <!-- IDENTITY -->
-    <h2 class="identity">IDENTITY</h2>
-    <div class="subtitle">Who I'm becoming</div>
-
-    <div class="checkbox-item worship" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Prioritizes worship</span>
-    </div>
-    <div class="checkbox-item ships" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Ships consistently</span>
-    </div>
-    <div class="checkbox-item health" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Protects health</span>
-    </div>
-    <div class="checkbox-item family" onclick="toggleCheckbox(this)">
-        <div class="checkbox"></div>
-        <span class="checkbox-label">Shows up for family</span>
-    </div>
-
-    <hr>
-
-    <!-- REFLECT -->
-    <h2 class="reflect">REFLECT</h2>
-    <div class="subtitle">Clarity</div>
-
-    <div class="metric-label">🏆 Today's win</div>
-    <textarea id="win-today" placeholder="What went well today?"></textarea>
-
-    <div class="metric-label">🎯 Tomorrow's ONE thing</div>
-    <input type="text" id="tomorrow-one-thing" placeholder="What's your top priority tomorrow?">
-
-    <div class="metric-label">💡 Insight/learning</div>
-    <textarea id="insight-learning" placeholder="What did you learn today?"></textarea>
-
-    <hr>
-
-    <!-- SCORE -->
-    <h2 class="score">SCORE</h2>
-
-    <div class="stars" id="rating-stars">
+    <div class="stars-wrap">
         <span class="star" onclick="setRating(1)">★</span>
         <span class="star" onclick="setRating(2)">★</span>
         <span class="star" onclick="setRating(3)">★</span>
@@ -712,371 +658,282 @@
         <span class="star" onclick="setRating(5)">★</span>
     </div>
 </div>
+```
 
-<!-- EXPORT -->
-<div class="export-section">
-    <div class="export-buttons">
-        <button class="btn btn-primary" onclick="exportToObsidian()">📋 Copy to Obsidian</button>
-        <button class="btn btn-secondary" onclick="downloadMarkdown()">💾 Download File</button>
+</div>
+
+<div class="bottom-bar">
+    <div class="bottom-btns">
+        <button class="btn btn-primary" onclick="exportToObsidian()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Copy to Obsidian</button>
+        <button class="btn btn-secondary" onclick="downloadMarkdown()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
     </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-    <div class="toast-icon">✓</div>
-    <div class="toast-text" id="toast-text">Copied!</div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-    const today = new Date();
+    const today   = new Date();
     const todayStr = today.toISOString().split('T')[0];
-    document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-    const salahEmojis = ['—', '⏰', '🕌', '⏳', '❌'];
-    let salahStates = {fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0};
+    document.getElementById('headerDate').textContent =
+        today.toLocaleDateString('en-GB', { weekday:'long' }).toUpperCase();
+    document.getElementById('headerDay').textContent =
+        today.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
 
-    // Track which pillars are ticked
-    const pillarState = { deen: false, career: false, body: false, build: false, bonds: false };
+    const pillarState = { deen:false, career:false, body:false, build:false, bonds:false };
 
-    function cycleSalah(prayer) {
-        salahStates[prayer] = (salahStates[prayer] + 1) % salahEmojis.length;
-        document.getElementById('salah-' + prayer).textContent = salahEmojis[salahStates[prayer]];
-        saveData();
-    }
-
-    function toggleCheckbox(element, pillar) {
-        const checkbox = element.querySelector('.checkbox');
-        checkbox.classList.toggle('checked');
-        if (pillar) {
-            pillarState[pillar] = checkbox.classList.contains('checked');
-            checkNagDismiss();
-        }
-        saveData();
-    }
-
-    function setRating(rating) {
-        const stars = document.querySelectorAll('.star');
-        stars.forEach((star, index) => {
-            if (index < rating) star.classList.add('active');
-            else star.classList.remove('active');
+    function updateProgress() {
+        Object.keys(pillarState).forEach(p => {
+            const el = document.getElementById('p-' + p);
+            if (el) el.classList.toggle('done', pillarState[p]);
         });
+        checkNagDismiss();
+    }
+
+    const salahEmojis = ['—','⏰','🕌','⏳','❌'];
+    const salahStates = { fajr:0, dhuhr:0, asr:0, maghrib:0, isha:0 };
+
+    function cycleSalah(p) {
+        salahStates[p] = (salahStates[p] + 1) % salahEmojis.length;
+        document.getElementById('salah-' + p).textContent = salahEmojis[salahStates[p]];
         saveData();
     }
 
-    let saveTimeout;
+    function toggleCheck(row, pillar) {
+        const box = row.querySelector('.check-box');
+        const on  = !box.classList.contains('checked');
+        box.classList.toggle('checked', on);
+        row.classList.toggle('done-row', on);
+        if (pillar) { pillarState[pillar] = on; updateProgress(); }
+        saveData();
+    }
+
+    function setRating(n) {
+        document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < n));
+        saveData();
+    }
+
+    let saveTid;
     function saveData() {
+        const boxes = document.querySelectorAll('.check-box');
+        const c = i => boxes[i].classList.contains('checked');
         const data = {
             date: todayStr,
-            salah_fajr: salahEmojis[salahStates.fajr],
-            salah_dhuhr: salahEmojis[salahStates.dhuhr],
-            salah_asr: salahEmojis[salahStates.asr],
+            salah_fajr:    salahEmojis[salahStates.fajr],
+            salah_dhuhr:   salahEmojis[salahStates.dhuhr],
+            salah_asr:     salahEmojis[salahStates.asr],
             salah_maghrib: salahEmojis[salahStates.maghrib],
-            salah_isha: salahEmojis[salahStates.isha],
-            quran_pages: document.getElementById('quran-pages').value || 0,
-            adhkar_morning: document.querySelector('.morning-adhkar .checkbox').classList.contains('checked'),
-            adhkar_evening: document.querySelector('.evening-adhkar .checkbox').classList.contains('checked'),
-            inbox_cleared: document.querySelectorAll('.inbox .checkbox')[0].classList.contains('checked'),
-            tomorrow_planned: document.querySelector('.plan .checkbox').classList.contains('checked'),
-            deep_work: document.querySelector('.deepwork .checkbox').classList.contains('checked'),
-            work_quality: document.getElementById('work-quality').value || 0,
-            workout: document.querySelector('.workout .checkbox').classList.contains('checked'),
-            sleep_time: document.getElementById('sleep-time').value || '',
-            sleep_hours: document.getElementById('sleep-hours').value || 0,
-            energy: document.getElementById('energy').value || 0,
-            levela: document.querySelector('.levela .checkbox').classList.contains('checked'),
+            salah_isha:    salahEmojis[salahStates.isha],
+            quran_pages:   document.getElementById('quran-pages').value || 0,
+            adhkar_morning:   c(0), adhkar_evening:    c(1),
+            inbox_cleared:    c(2), tomorrow_planned:  c(3),
+            deep_work:        c(4),
+            work_quality:  document.getElementById('work-quality').value || 0,
+            workout:          c(5),
+            sleep_time:    document.getElementById('sleep-time').value || '',
+            sleep_hours:   document.getElementById('sleep-hours').value || 0,
+            energy:        document.getElementById('energy').value || 0,
+            levela:           c(6),
             project_hours: document.getElementById('project-hours').value || 0,
-            shipped: document.querySelector('.shipped .checkbox').classList.contains('checked'),
-            family_time: document.querySelectorAll('.family .checkbox')[0].classList.contains('checked'),
-            family_hours: document.getElementById('family-hours').value || 0,
-            prioritizes_worship: document.querySelector('.worship .checkbox').classList.contains('checked'),
-            ships_consistently: document.querySelector('.ships .checkbox').classList.contains('checked'),
-            protects_health: document.querySelector('.health .checkbox').classList.contains('checked'),
-            shows_up_family: document.querySelectorAll('.family .checkbox')[1].classList.contains('checked'),
-            win_today: document.getElementById('win-today').value || '',
+            shipped:          c(7),
+            family_time:      c(8),
+            family_hours:  document.getElementById('family-hours').value || 0,
+            prioritizes_worship: c(9),  ships_consistently: c(10),
+            protects_health:     c(11), shows_up_family:    c(12),
+            win_today:          document.getElementById('win-today').value || '',
             tomorrow_one_thing: document.getElementById('tomorrow-one-thing').value || '',
-            insight_learning: document.getElementById('insight-learning').value || '',
-            day_rating: document.querySelectorAll('.star.active').length || 0
+            insight_learning:   document.getElementById('insight-learning').value || '',
+            day_rating:         document.querySelectorAll('.star.active').length || 0
         };
-
         localStorage.setItem('daily-tracker', JSON.stringify(data));
-
-        const indicator = document.getElementById('saveIndicator');
-        indicator.classList.add('show');
-        clearTimeout(saveTimeout);
-        saveTimeout = setTimeout(() => indicator.classList.remove('show'), 2000);
+        const dot = document.getElementById('saveDot');
+        dot.classList.add('show');
+        clearTimeout(saveTid);
+        saveTid = setTimeout(() => dot.classList.remove('show'), 1500);
     }
 
     function loadData() {
         const saved = localStorage.getItem('daily-tracker');
         if (!saved) return;
+        const d = JSON.parse(saved);
+        if (d.date !== todayStr) return;
 
-        const data = JSON.parse(saved);
-        if (data.date !== todayStr) return; // don't load yesterday's data
+        Object.keys(salahStates).forEach(p => {
+            const idx = salahEmojis.indexOf(d['salah_' + p]);
+            if (idx !== -1) { salahStates[p] = idx; document.getElementById('salah-' + p).textContent = salahEmojis[idx]; }
+        });
 
-        Object.keys(salahStates).forEach(prayer => {
-            const idx = salahEmojis.indexOf(data['salah_' + prayer]);
-            if (idx !== -1) {
-                salahStates[prayer] = idx;
-                document.getElementById('salah-' + prayer).textContent = salahEmojis[idx];
+        const set = (id, val) => { if (val) document.getElementById(id).value = val; };
+        set('quran-pages', d.quran_pages);
+        set('work-quality', d.work_quality);
+        set('sleep-time', d.sleep_time);
+        set('sleep-hours', d.sleep_hours);
+        set('energy', d.energy);
+        set('project-hours', d.project_hours);
+        set('family-hours', d.family_hours);
+        set('win-today', d.win_today);
+        set('tomorrow-one-thing', d.tomorrow_one_thing);
+        set('insight-learning', d.insight_learning);
+
+        const map = [
+            [0, d.adhkar_morning,      'deen'],
+            [1, d.adhkar_evening,       null],
+            [2, d.inbox_cleared,        null],
+            [3, d.tomorrow_planned,     null],
+            [4, d.deep_work,           'career'],
+            [5, d.workout,             'body'],
+            [6, d.levela,              'build'],
+            [7, d.shipped,              null],
+            [8, d.family_time,         'bonds'],
+            [9, d.prioritizes_worship,  null],
+            [10,d.ships_consistently,   null],
+            [11,d.protects_health,      null],
+            [12,d.shows_up_family,      null],
+        ];
+
+        const boxes = document.querySelectorAll('.check-box');
+        const rows  = document.querySelectorAll('.check-row');
+
+        map.forEach(([i, val, pillar]) => {
+            if (val) {
+                boxes[i].classList.add('checked');
+                rows[i].classList.add('done-row');
+                if (pillar) pillarState[pillar] = true;
             }
         });
 
-        document.getElementById('quran-pages').value = data.quran_pages || '';
-        if (data.adhkar_morning) { document.querySelector('.morning-adhkar .checkbox').classList.add('checked'); pillarState.deen = true; }
-        if (data.adhkar_evening) document.querySelector('.evening-adhkar .checkbox').classList.add('checked');
-        if (data.inbox_cleared) document.querySelectorAll('.inbox .checkbox')[0].classList.add('checked');
-        if (data.tomorrow_planned) document.querySelector('.plan .checkbox').classList.add('checked');
-        if (data.deep_work) { document.querySelector('.deepwork .checkbox').classList.add('checked'); pillarState.career = true; }
-        document.getElementById('work-quality').value = data.work_quality || '';
-        if (data.workout) { document.querySelector('.workout .checkbox').classList.add('checked'); pillarState.body = true; }
-        document.getElementById('sleep-time').value = data.sleep_time || '';
-        document.getElementById('sleep-hours').value = data.sleep_hours || '';
-        document.getElementById('energy').value = data.energy || '';
-        if (data.levela) { document.querySelector('.levela .checkbox').classList.add('checked'); pillarState.build = true; }
-        document.getElementById('project-hours').value = data.project_hours || '';
-        if (data.shipped) document.querySelector('.shipped .checkbox').classList.add('checked');
-        if (data.family_time) { document.querySelectorAll('.family .checkbox')[0].classList.add('checked'); pillarState.bonds = true; }
-        document.getElementById('family-hours').value = data.family_hours || '';
-        if (data.prioritizes_worship) document.querySelector('.worship .checkbox').classList.add('checked');
-        if (data.ships_consistently) document.querySelector('.ships .checkbox').classList.add('checked');
-        if (data.protects_health) document.querySelector('.health .checkbox').classList.add('checked');
-        if (data.shows_up_family) document.querySelectorAll('.family .checkbox')[1].classList.add('checked');
-        document.getElementById('win-today').value = data.win_today || '';
-        document.getElementById('tomorrow-one-thing').value = data.tomorrow_one_thing || '';
-        document.getElementById('insight-learning').value = data.insight_learning || '';
-
-        const stars = document.querySelectorAll('.star');
-        for (let i = 0; i < data.day_rating; i++) stars[i].classList.add('active');
+        for (let i = 0; i < d.day_rating; i++) document.querySelectorAll('.star')[i].classList.add('active');
+        updateProgress();
     }
 
-    // ── NAG SCREEN ────────────────────────────────────────────
-
-    const PILLAR_LABELS = { deen: 'Deen', career: 'Career', body: 'Body', build: 'Build', bonds: 'Bonds' };
-
-    function getMissingPillars() {
-        return Object.keys(pillarState).filter(p => !pillarState[p]).map(p => PILLAR_LABELS[p]);
-    }
+    // Nag
+    const PL = { deen:'Deen', career:'Career', body:'Body', build:'Build', bonds:'Bonds' };
+    const getMissing = () => Object.keys(pillarState).filter(p => !pillarState[p]).map(p => PL[p]);
 
     function checkNagDismiss() {
-        const missing = getMissingPillars();
-        if (missing.length === 0) {
-            const nag = document.getElementById('levela-nag');
-            if (nag) nag.remove();
-        }
+        if (getMissing().length === 0) { const n = document.getElementById('levela-nag'); if (n) n.remove(); }
     }
 
     function showNag() {
-        const missing = getMissingPillars();
-        if (missing.length === 0) return;
-
-        const overlay = document.createElement('div');
-        overlay.id = 'levela-nag';
-        overlay.innerHTML =
+        const missing = getMissing();
+        if (!missing.length) return;
+        const el = document.createElement('div');
+        el.id = 'levela-nag';
+        el.innerHTML =
             '<div class="nag-card">' +
-            '<div class="nag-icon">📋</div>' +
+            '<span class="nag-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span>' +
             '<p class="nag-title">' + (missing.length === 5 ? 'Tracker not filled in today' : 'Still to tick today') + '</p>' +
             '<p class="nag-sub">' + missing.length + ' pillar' + (missing.length > 1 ? 's' : '') + ' incomplete — takes under 2 minutes</p>' +
-            '<ul class="nag-list">' + missing.map(function(p) { return '<li class="nag-item">' + p + '</li>'; }).join('') + '</ul>' +
+            '<ul class="nag-list">' + missing.map(p => '<li class="nag-item">' + p + '</li>').join('') + '</ul>' +
             '<button class="nag-btn" onclick="document.getElementById(\'levela-nag\').remove()">Let me fill it in →</button>' +
             '</div>';
-        document.body.appendChild(overlay);
+        document.body.appendChild(el);
     }
 
     function generateMarkdown() {
         const saved = localStorage.getItem('daily-tracker');
-        if (!saved) { showToast('⚠️', 'No data to export!'); return null; }
-
-        const data = JSON.parse(saved);
-        const dateObj = new Date(data.date);
-        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-        const monthName = dateObj.toLocaleDateString('en-US', { month: 'long' });
-        const day = dateObj.getDate();
-        const year = dateObj.getFullYear();
-
+        if (!saved) { showToast('⚠️ No data to export'); return null; }
+        const d = JSON.parse(saved);
+        const dt = new Date(d.date);
+        const dayName  = dt.toLocaleDateString('en-GB', { weekday:'long' });
+        const fullDate = dt.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
         return `---
-```
-
-date: ${data.date}
+date: ${d.date}
 day: ${dayName}
+salah_fajr: "${d.salah_fajr}"
+salah_dhuhr: "${d.salah_dhuhr}"
+salah_asr: "${d.salah_asr}"
+salah_maghrib: "${d.salah_maghrib}"
+salah_isha: "${d.salah_isha}"
+quran_pages: ${d.quran_pages}
+adhkar_morning: ${d.adhkar_morning}
+adhkar_evening: ${d.adhkar_evening}
+inbox_cleared: ${d.inbox_cleared}
+tomorrow_planned: ${d.tomorrow_planned}
+deep_work: ${d.deep_work}
+work_quality: ${d.work_quality}
+workout: ${d.workout}
+sleep_time: "${d.sleep_time}"
+sleep_hours: ${d.sleep_hours}
+energy: ${d.energy}
+levela: ${d.levela}
+project_hours: ${d.project_hours}
+shipped: ${d.shipped}
+family_time: ${d.family_time}
+family_hours: ${d.family_hours}
+prioritizes_worship: ${d.prioritizes_worship}
+ships_consistently: ${d.ships_consistently}
+protects_health: ${d.protects_health}
+shows_up_family: ${d.shows_up_family}
+win_today: "${d.win_today}"
+tomorrow_one_thing: "${d.tomorrow_one_thing}"
+insight_learning: "${d.insight_learning}"
+day_rating: ${d.day_rating}
+---
 
-# Deen
+# ${dayName}, ${fullDate}
 
-salah_fajr: “${data.salah_fajr}”
-salah_dhuhr: “${data.salah_dhuhr}”
-salah_asr: “${data.salah_asr}”
-salah_maghrib: “${data.salah_maghrib}”
-salah_isha: “${data.salah_isha}”
-quran_pages: ${data.quran_pages}
-adhkar_morning: ${data.adhkar_morning}
-adhkar_evening: ${data.adhkar_evening}
+## 🕌 Deen
+Fajr ${d.salah_fajr} | Dhuhr ${d.salah_dhuhr} | Asr ${d.salah_asr} | Maghrib ${d.salah_maghrib} | Isha ${d.salah_isha}
+Pages: ${d.quran_pages} | [${d.adhkar_morning?'x':' '}] Morning adhkar | [${d.adhkar_evening?'x':' '}] Evening adhkar
 
-# Capture
+## 📥 Capture
+[${d.inbox_cleared?'x':' '}] Brain dump | [${d.tomorrow_planned?'x':' '}] Tomorrow planned
 
-inbox_cleared: ${data.inbox_cleared}
-tomorrow_planned: ${data.tomorrow_planned}
+## 📊 Log
+**Career:** [${d.deep_work?'x':' '}] Deep work · Quality ${d.work_quality}/3
+**Body:** [${d.workout?'x':' '}] Workout · ${d.sleep_hours}h sleep at ${d.sleep_time} · Energy ${d.energy}/3
+**Build:** [${d.levela?'x':' '}] Levela · ${d.project_hours}h · [${d.shipped?'x':' '}] Shipped
+**Bonds:** [${d.family_time?'x':' '}] Family · ${d.family_hours}h
 
-# Log
+## 💪 Identity
+[${d.prioritizes_worship?'x':' '}] Worship | [${d.ships_consistently?'x':' '}] Ships | [${d.protects_health?'x':' '}] Health | [${d.shows_up_family?'x':' '}] Family
 
-deep_work: ${data.deep_work}
-work_quality: ${data.work_quality}
-workout: ${data.workout}
-sleep_time: “${data.sleep_time}”
-sleep_hours: ${data.sleep_hours}
-energy: ${data.energy}
-levela: ${data.levela}
-project_hours: ${data.project_hours}
-shipped: ${data.shipped}
-family_time: ${data.family_time}
-family_hours: ${data.family_hours}
+## 🤔 Reflect
+**Win:** ${d.win_today}
+**Tomorrow:** ${d.tomorrow_one_thing}
+**Insight:** ${d.insight_learning}
 
-# Identity
-
-prioritizes_worship: ${data.prioritizes_worship}
-ships_consistently: ${data.ships_consistently}
-protects_health: ${data.protects_health}
-shows_up_family: ${data.shows_up_family}
-
-# Reflect
-
-win_today: “${data.win_today}”
-tomorrow_one_thing: “${data.tomorrow_one_thing}”
-insight_learning: “${data.insight_learning}”
-
-# Score
-
-## day_rating: ${data.day_rating}
-
-# ${dayName}, ${monthName} ${day}, ${year}
-
------
-
-## 🕌 DEEN
-
-### Salah
-
-**Fajr:** ${data.salah_fajr} | **Dhuhr:** ${data.salah_dhuhr} | **Asr:** ${data.salah_asr} | **Maghrib:** ${data.salah_maghrib} | **Isha:** ${data.salah_isha}
-
-### Qur’an & Adhkar
-
-- Pages read: ${data.quran_pages}
-- [${data.adhkar_morning ? ‘x’ : ’ ’}] Morning adhkar
-- [${data.adhkar_evening ? ‘x’ : ’ ’}] Evening adhkar
-
------
-
-## 📥 CAPTURE
-
-- [${data.inbox_cleared ? ‘x’ : ’ ’}] Brain dumped to inbox
-- [${data.tomorrow_planned ? ‘x’ : ’ ’}] Tomorrow planned
-
------
-
-## 📊 LOG
-
-**▸ Career**
-
-- [${data.deep_work ? ‘x’ : ’ ’}] Deep work hour
-- Quality: ${data.work_quality}/3
-
-**▸ Body**
-
-- [${data.workout ? ‘x’ : ’ ’}] Workout
-- Sleep: ${data.sleep_hours}h at ${data.sleep_time}
-- Energy: ${data.energy}/3
-
-**▸ Build**
-
-- [${data.levela ? ‘x’ : ’ ’}] Levela progress
-- Project hours: ${data.project_hours}h
-- [${data.shipped ? ‘x’ : ’ ’}] Shipped something
-
-**▸ Bonds**
-
-- [${data.family_time ? ‘x’ : ’ ’}] Quality family time
-- Family hours: ${data.family_hours}h
-
------
-
-## 💪 IDENTITY
-
-- [${data.prioritizes_worship ? ‘x’ : ’ ’}] Prioritizes worship
-- [${data.ships_consistently ? ‘x’ : ’ ’}] Ships consistently
-- [${data.protects_health ? ‘x’ : ’ ’}] Protects health
-- [${data.shows_up_family ? ‘x’ : ’ ’}] Shows up for family
-
------
-
-## 🤔 REFLECT
-
-**🏆 Win:** ${data.win_today}
-**🎯 Tomorrow:** ${data.tomorrow_one_thing}
-**💡 Insight:** ${data.insight_learning}
-
------
-
-## ⭐ SCORE
-
-**Day rating:** ${data.day_rating}/5
-
------
-
-*Tracked via Daily Tracker PWA*
+## ⭐ ${d.day_rating}/5
 `;
-}
+    }
 
-```
     async function exportToObsidian() {
-        const markdown = generateMarkdown();
-        if (!markdown) return;
-        try {
-            await navigator.clipboard.writeText(markdown);
-            showToast('✓', 'Copied!');
-            setTimeout(() => alert('📋 Copied!\n\n1. Open Obsidian\n2. Open today\'s note\n3. Paste\n4. Done ✨'), 500);
-        } catch (err) {
-            const textArea = document.createElement('textarea');
-            textArea.value = markdown;
-            textArea.style.position = 'fixed';
-            textArea.style.opacity = '0';
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showToast('✓', 'Copied!');
+        const md = generateMarkdown();
+        if (!md) return;
+        try { await navigator.clipboard.writeText(md); }
+        catch {
+            const ta = document.createElement('textarea');
+            ta.value = md; ta.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
         }
+        showToast('✓ Copied to clipboard');
+        setTimeout(() => alert('📋 Copied!\n\n1. Open Obsidian\n2. Open today\'s note\n3. Paste — done ✨'), 400);
     }
 
     function downloadMarkdown() {
-        const markdown = generateMarkdown();
-        if (!markdown) return;
-        const data = JSON.parse(localStorage.getItem('daily-tracker'));
-        const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+        const md = generateMarkdown();
+        if (!md) return;
+        const d = JSON.parse(localStorage.getItem('daily-tracker'));
+        const blob = new Blob([md], { type:'text/markdown;charset=utf-8' });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = data.date + '.md';
-        link.click();
+        const a = document.createElement('a');
+        a.href = url; a.download = d.date + '.md'; a.click();
         URL.revokeObjectURL(url);
-        showToast('💾', 'Downloaded!');
+        showToast('💾 Downloaded');
     }
 
-    function showToast(icon, text) {
-        const toast = document.getElementById('toast');
-        document.querySelector('.toast-icon').textContent = icon;
-        document.getElementById('toast-text').textContent = text;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // Auto-save on input
-    document.querySelectorAll('input, textarea').forEach(input => {
-        input.addEventListener('input', saveData);
-    });
-
-    // Load saved data then show nag if needed
+    document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', saveData));
     loadData();
-    setTimeout(showNag, 800);
+    setTimeout(showNag, 900);
 </script>
-
 
 </body>
 </html>
