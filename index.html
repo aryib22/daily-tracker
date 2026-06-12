@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#080f1e">
@@ -23,6 +22,7 @@
             --text-2:    #8a9bb8;
             --text-3:    #4a5a72;
             --accent:    #14b8a6;
+            --gold:      #fcd34d;
             --c-deen:    #c084fc;
             --c-capture: #fb923c;
             --c-log:     #60a5fa;
@@ -37,628 +37,704 @@
             --radius-lg: 20px;
         }
 
-
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
-    html, body {
-        background: var(--bg) !important;
-        background-color: var(--bg) !important;
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-        min-height: 100vh;
-        -webkit-font-smoothing: antialiased;
-        color: var(--text-1);
-        overflow-x: hidden;
-    }
-
-    .container {
-        max-width: 560px;
-        margin: 0 auto;
-        padding: 0 16px 120px;
-    }
-
-    /* ── HEADER ─────────────────────────────────────────────── */
-    .header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: var(--bg);
-        padding: 20px 16px 14px;
-        margin: 0 -16px;
-        border-bottom: 1px solid var(--border);
-        max-width: 560px;
-        margin: 0 auto;
-    }
-
-    .header-date {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--text-3);
-        margin-bottom: 2px;
-    }
-
-    .header-day {
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-1);
-        letter-spacing: -0.02em;
-    }
-
-    .progress-bar {
-        display: flex;
-        gap: 6px;
-        margin-top: 12px;
-    }
-
-    .progress-pill {
-        flex: 1;
-        height: 3px;
-        background: var(--border-md);
-        border-radius: 99px;
-        transition: background 0.4s ease;
-    }
-
-    .progress-pill.done { background: var(--accent); }
-
-    /* ── SECTION ────────────────────────────────────────────── */
-    .section {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        margin-top: 16px;
-        overflow: hidden;
-    }
-
-    .section-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 16px 20px 14px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .section-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 15px;
-    }
-
-    .section-title {
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-
-    .section-sub {
-        font-size: 11px;
-        color: var(--text-3);
-        margin-left: auto;
-        font-weight: 500;
-    }
-
-    .s-deen     .section-icon { background: rgba(192,132,252,0.12); }
-    .s-deen     .section-title { color: var(--c-deen); }
-    .s-capture  .section-icon { background: rgba(251,146,60,0.12); }
-    .s-capture  .section-title { color: var(--c-capture); }
-    .s-log      .section-icon { background: rgba(96,165,250,0.12); }
-    .s-log      .section-title { color: var(--c-log); }
-    .s-identity .section-icon { background: rgba(110,231,183,0.12); }
-    .s-identity .section-title { color: var(--c-identity); }
-    .s-reflect  .section-icon { background: rgba(252,211,77,0.12); }
-    .s-reflect  .section-title { color: var(--c-reflect); }
-    .s-score    .section-icon { background: rgba(251,146,60,0.12); }
-    .s-score    .section-title { color: var(--c-score); }
-
-    /* ── SALAH ──────────────────────────────────────────────── */
-    .salah-legend {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-        padding: 14px 16px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .legend-item {
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 8px 4px;
-        font-size: 11px;
-        font-weight: 600;
-        text-align: center;
-        color: var(--text-3);
-    }
-
-    .salah-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-    }
-
-    .salah-cell {
-        padding: 14px 8px;
-        text-align: center;
-        cursor: pointer;
-        border-right: 1px solid var(--border);
-        transition: background 0.15s;
-    }
-
-    .salah-cell:last-child { border-right: none; }
-    .salah-cell:active { background: rgba(255,255,255,0.04); }
-
-    .salah-label {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-3);
-        margin-bottom: 8px;
-    }
-
-    .salah-emoji { font-size: 20px; display: block; }
-
-    /* ── SUB LABEL ──────────────────────────────────────────── */
-    .sub-label {
-        padding: 16px 20px 6px;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        display: block;
-        border-top: 1px solid var(--border);
-    }
-
-    .sub-label.career { color: var(--c-deen); }
-    .sub-label.body   { color: var(--c-body); }
-    .sub-label.build  { color: var(--c-build); }
-    .sub-label.bonds  { color: var(--c-bonds); }
-
-    /* ── CHECK ROW ──────────────────────────────────────────── */
-    .check-row {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 15px 20px;
-        border-top: 1px solid var(--border);
-        cursor: pointer;
-        transition: background 0.15s;
-        min-height: 54px;
-    }
-
-    .check-row:active { background: rgba(255,255,255,0.03); }
-
-    .check-box {
-        width: 22px;
-        height: 22px;
-        border: 1.5px solid var(--border-md);
-        border-radius: 50%;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-        background: var(--bg-input);
-    }
-
-    .check-box.checked {
-        background: var(--accent);
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(20,184,166,0.15);
-        transform: scale(1.08);
-    }
-
-    .check-box.checked::after {
-        content: '';
-        display: block;
-        width: 6px;
-        height: 10px;
-        border: 2px solid #080f1e;
-        border-top: none;
-        border-left: none;
-        transform: rotate(45deg) translateY(-1px);
-    }
-
-    .check-label {
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--text-1);
-        line-height: 1.3;
-        transition: color 0.2s;
-    }
-
-    .check-row.done-row .check-label {
-        color: var(--text-3);
-        text-decoration: line-through;
-    }
-
-    /* ── METRIC ROW ─────────────────────────────────────────── */
-    .metric-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 13px 20px;
-        border-top: 1px solid var(--border);
-        min-height: 54px;
-    }
-
-    .metric-label {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--text-2);
-    }
-
-    .metric-input {
-        background: var(--bg-input);
-        border: 1px solid var(--border-md);
-        border-radius: var(--radius-sm);
-        padding: 9px 12px;
-        color: var(--c-capture);
-        font-size: 14px;
-        font-weight: 600;
-        font-family: inherit;
-        text-align: center;
-        width: 88px;
-        transition: border-color 0.2s;
-    }
-
-    .metric-input.wide { width: 124px; }
-
-    .metric-input:focus {
-        outline: none;
-        border-color: var(--accent);
-    }
-
-    /* ── TEXT BLOCKS ────────────────────────────────────────── */
-    .text-block { padding: 4px 16px 16px; }
-
-    .text-label {
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--text-3);
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        padding: 16px 4px 8px;
-        display: block;
-    }
-
-    textarea, input[type="text"] {
-        width: 100%;
-        background: var(--bg-input);
-        border: 1px solid var(--border-md);
-        border-radius: var(--radius-md);
-        padding: 12px 14px;
-        color: var(--text-1);
-        font-size: 15px;
-        font-family: inherit;
-        font-weight: 400;
-        line-height: 1.5;
-        resize: none;
-        transition: border-color 0.2s;
-    }
-
-    textarea { min-height: 72px; }
-
-    textarea:focus, input[type="text"]:focus {
-        outline: none;
-        border-color: rgba(20,184,166,0.4);
-    }
-
-    textarea::placeholder, input::placeholder { color: var(--text-3); }
-
-    /* ── STARS ──────────────────────────────────────────────── */
-    .stars-wrap {
-        padding: 20px;
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-    }
-
-    .star {
-        font-size: 36px;
-        cursor: pointer;
-        opacity: 0.18;
-        transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-        user-select: none;
-    }
-
-    .star.active {
-        opacity: 1;
-        color: #fcd34d;
-        transform: scale(1.15);
-        filter: drop-shadow(0 0 8px rgba(252,211,77,0.35));
-    }
-
-    /* ── BOTTOM BAR ─────────────────────────────────────────── */
-    .bottom-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 12px 16px;
-        padding-bottom: calc(12px + env(safe-area-inset-bottom));
-        background: rgba(8,15,30,0.96);
-        border-top: 1px solid var(--border);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        z-index: 200;
-    }
-
-    .bottom-btns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        max-width: 560px;
-        margin: 0 auto;
-    }
-
-    .btn {
-        padding: 14px;
-        border-radius: var(--radius-md);
-        border: none;
-        font-family: inherit;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        letter-spacing: -0.01em;
-        transition: transform 0.15s, opacity 0.15s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-    }
-
-    .btn:active { transform: scale(0.97); opacity: 0.9; }
-    .btn-primary { background: var(--accent); color: #080f1e; }
-    .btn-secondary { background: var(--bg-card); color: var(--text-1); border: 1px solid var(--border-md); }
-
-    /* ── TOAST ──────────────────────────────────────────────── */
-    .toast {
-        position: fixed;
-        bottom: 90px;
-        left: 50%;
-        transform: translateX(-50%) translateY(16px);
-        background: var(--bg-card);
-        border: 1px solid var(--border-md);
-        padding: 11px 20px;
-        border-radius: 99px;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-1);
-        z-index: 999;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.25s ease;
-        white-space: nowrap;
-    }
-
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* ── SAVE DOT ───────────────────────────────────────────── */
-    .save-dot {
-        position: fixed;
-        top: 18px;
-        right: 16px;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        opacity: 0;
-        z-index: 300;
-        transition: opacity 0.3s;
-    }
-
-    .save-dot.show { opacity: 1; }
-
-    /* ── NAG ────────────────────────────────────────────────── */
-    #levela-nag {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(4,8,18,0.94);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-    }
-
-    .nag-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-md);
-        border-radius: var(--radius-lg);
-        padding: 32px 24px 28px;
-        max-width: 320px;
-        width: 100%;
-        text-align: center;
-    }
-
-    .nag-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
-
-    .nag-title {
-        color: var(--text-1);
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0 0 6px;
-        letter-spacing: -0.02em;
-    }
-
-    .nag-sub { color: var(--text-3); font-size: 13px; margin: 0 0 20px; line-height: 1.5; }
-
-    .nag-list { list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; }
-
-    .nag-item {
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 11px 16px;
-        color: var(--c-capture);
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .nag-btn {
-        width: 100%;
-        background: var(--accent);
-        color: #080f1e;
-        border: none;
-        border-radius: var(--radius-md);
-        padding: 15px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: inherit;
-        letter-spacing: -0.01em;
-    }
-
-    .nag-btn:active { opacity: 0.85; }
-</style>
-
-
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        html, body {
+            background: var(--bg) !important;
+            background-color: var(--bg) !important;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            color: var(--text-1);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 0 16px 120px;
+        }
+
+        /* ── HEADER ─────────────────────────────────────────────── */
+        .header-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding-top: env(safe-area-inset-top);
+        }
+
+        .header-inner {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 14px 16px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-nav {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-md);
+            color: var(--text-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.15s;
+        }
+
+        .date-nav:active { background: var(--bg-input); }
+
+        .date-center {
+            flex: 1;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .header-date {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-3);
+        }
+
+        .header-day {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-1);
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        .today-link {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 2px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .today-link.show { display: inline-block; }
+
+        .ring-wrap {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+        }
+
+        .ring-svg { width: 46px; height: 46px; transform: rotate(-90deg); }
+        .ring-bg { fill: none; stroke: var(--border-md); stroke-width: 3; }
+        .ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 3;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s cubic-bezier(0.65,0,0.35,1), stroke 0.3s;
+        }
+        .ring-fill.complete { stroke: var(--gold); }
+
+        .ring-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+
+        .daytype-row {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 0 16px 14px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dt-btn {
+            flex: 1;
+            padding: 9px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-md);
+            background: var(--bg-card);
+            color: var(--text-3);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dt-btn.active {
+            background: rgba(20,184,166,0.12);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .section-sub {
+            font-size: 11px;
+            color: var(--text-3);
+            margin-left: auto;
+            font-weight: 500;
+        }
+
+        .s-deen     .section-icon { background: rgba(192,132,252,0.12); }
+        .s-deen     .section-title { color: var(--c-deen); }
+        .s-capture  .section-icon { background: rgba(251,146,60,0.12); }
+        .s-capture  .section-title { color: var(--c-capture); }
+        .s-log      .section-icon { background: rgba(96,165,250,0.12); }
+        .s-log      .section-title { color: var(--c-log); }
+        .s-identity .section-icon { background: rgba(110,231,183,0.12); }
+        .s-identity .section-title { color: var(--c-identity); }
+        .s-reflect  .section-icon { background: rgba(252,211,77,0.12); }
+        .s-reflect  .section-title { color: var(--c-reflect); }
+        .s-score    .section-icon { background: rgba(251,146,60,0.12); }
+        .s-score    .section-title { color: var(--c-score); }
+
+        .salah-legend {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .legend-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-3);
+        }
+
+        .salah-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+
+        .salah-cell {
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            border-right: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .salah-cell:last-child { border-right: none; }
+        .salah-cell:active { background: rgba(255,255,255,0.04); }
+
+        .salah-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 8px;
+        }
+
+        .salah-emoji { font-size: 20px; display: block; }
+
+        .sub-label {
+            padding: 16px 20px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: block;
+            border-top: 1px solid var(--border);
+        }
+
+        .sub-label.career { color: var(--c-deen); }
+        .sub-label.body   { color: var(--c-body); }
+        .sub-label.build  { color: var(--c-build); }
+        .sub-label.bonds  { color: var(--c-bonds); }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 15px 20px;
+            border-top: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+            min-height: 54px;
+        }
+
+        .check-row:active { background: rgba(255,255,255,0.03); }
+        .check-row.hidden-day { display: none; }
+
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border: 1.5px solid var(--border-md);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            background: var(--bg-input);
+        }
+
+        .check-box.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(20,184,166,0.15);
+            transform: scale(1.08);
+        }
+
+        .check-box.checked::after {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 10px;
+            border: 2px solid #080f1e;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        .check-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-1);
+            line-height: 1.3;
+            transition: color 0.2s;
+        }
+
+        .check-row.done-row .check-label {
+            color: var(--text-3);
+            text-decoration: line-through;
+        }
+
+        .metric-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 20px;
+            border-top: 1px solid var(--border);
+            min-height: 54px;
+        }
+
+        .metric-row.hidden-day { display: none; }
+        .metric-label { font-size: 14px; font-weight: 500; color: var(--text-2); }
+
+        .metric-input {
+            background: var(--bg-input);
+            border: 1px solid var(--border-md);
+            border-radius: var(--radius-sm);
+            padding: 9px 12px;
+            color: var(--c-capture);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            text-align: center;
+            width: 88px;
+            transition: border-color 0.2s;
+        }
+
+        .metric-input.wide { width: 124px; }
+        .metric-input:focus { outline: none; border-color: var(--accent); }
+
+        .text-block { padding: 4px 16px 16px; }
+
+        .text-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 16px 4px 8px;
+            display: block;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-md);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            color: var(--text-1);
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: 400;
+            line-height: 1.5;
+            resize: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea { min-height: 72px; }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: rgba(20,184,166,0.4); }
+        textarea::placeholder, input::placeholder { color: var(--text-3); }
+
+        .stars-wrap { padding: 20px; display: flex; gap: 12px; justify-content: center; }
+
+        .star {
+            font-size: 36px;
+            cursor: pointer;
+            opacity: 0.18;
+            transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            user-select: none;
+        }
+
+        .star.active {
+            opacity: 1;
+            color: var(--gold);
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px rgba(252,211,77,0.35));
+        }
+
+        /* ── ENERGY PIPS ────────────────────────────────────────── */
+        .pips-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pip {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border-md);
+            background: var(--bg-input);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .pip.active {
+            background: var(--c-body);
+            border-color: var(--c-body);
+            box-shadow: 0 0 0 4px rgba(251,146,60,0.15);
+            transform: scale(1.1);
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            background: rgba(8,15,30,0.96);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 200;
+        }
+
+        .bottom-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            padding: 14px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: -0.01em;
+            transition: transform 0.15s, opacity 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-primary { background: var(--accent); color: #080f1e; }
+        .btn-secondary { background: var(--bg-card); color: var(--text-1); border: 1px solid var(--border-md); }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(16px);
+            background: var(--bg-card);
+            border: 1px solid var(--border-md);
+            padding: 11px 20px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-1);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .save-dot {
+            position: fixed;
+            top: calc(18px + env(safe-area-inset-top));
+            right: 16px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0;
+            z-index: 300;
+            transition: opacity 0.3s;
+        }
+
+        .save-dot.show { opacity: 1; }
+
+        #levela-nag {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(4,8,18,0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .nag-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-md);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px 28px;
+            max-width: 320px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .nag-icon { display: flex; justify-content: center; margin-bottom: 14px; }
+        .nag-title { color: var(--text-1); font-size: 18px; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.02em; }
+        .nag-sub { color: var(--text-3); font-size: 13px; margin: 0 0 20px; line-height: 1.5; }
+        .nag-list { list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; }
+
+        .nag-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 11px 16px;
+            color: var(--c-capture);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nag-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #080f1e;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: -0.01em;
+        }
+
+        .nag-btn:active { opacity: 0.85; }
+    </style>
 </head>
 <body>
 
 <div class="save-dot" id="saveDot"></div>
 
-<div style="position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);">
-    <div style="max-width:560px;margin:0 auto;padding:20px 16px 14px;">
-        <div class="header-date" id="headerDate"></div>
-        <div class="header-day" id="headerDay"></div>
-        <div class="progress-bar">
-            <div class="progress-pill" id="p-deen"></div>
-            <div class="progress-pill" id="p-career"></div>
-            <div class="progress-pill" id="p-body"></div>
-            <div class="progress-pill" id="p-build"></div>
-            <div class="progress-pill" id="p-bonds"></div>
+<div class="header-wrap">
+    <div class="header-inner">
+        <div class="date-nav" onclick="changeDate(-1)">‹</div>
+        <div class="date-center">
+            <div class="header-date" id="headerDate"></div>
+            <div class="header-day" id="headerDay"></div>
+            <div class="today-link" id="todayLink" onclick="goToday()">Jump to today</div>
         </div>
+        <div class="date-nav" onclick="changeDate(1)">›</div>
+        <div class="ring-wrap">
+            <svg class="ring-svg" viewBox="0 0 36 36">
+                <circle class="ring-bg" cx="18" cy="18" r="15.5"/>
+                <circle class="ring-fill" id="ringFill" cx="18" cy="18" r="15.5"/>
+            </svg>
+            <span class="ring-text" id="ringText">0%</span>
+        </div>
+    </div>
+    <div class="daytype-row">
+        <button class="dt-btn" id="btn-build" onclick="setDayType('build')">Build day</button>
+        <button class="dt-btn" id="btn-office" onclick="setDayType('office')">Office day</button>
     </div>
 </div>
 
 <div class="container">
 
-
-<!-- DEEN -->
-<div class="section s-deen">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
-        <span class="section-title">Deen</span>
-        <span class="section-sub">Foundation first</span>
-    </div>
-    <div class="salah-legend">
-        <div class="legend-item">⏰ On time</div>
-        <div class="legend-item">🕌 Masjid</div>
-        <div class="legend-item">⏳ Late</div>
-        <div class="legend-item">❌ Missed</div>
-    </div>
-    <div class="salah-grid">
-        <div class="salah-cell" onclick="cycleSalah('fajr')"><div class="salah-label">Fajr</div><span class="salah-emoji" id="salah-fajr">—</span></div>
-        <div class="salah-cell" onclick="cycleSalah('dhuhr')"><div class="salah-label">Dhuhr</div><span class="salah-emoji" id="salah-dhuhr">—</span></div>
-        <div class="salah-cell" onclick="cycleSalah('asr')"><div class="salah-label">Asr</div><span class="salah-emoji" id="salah-asr">—</span></div>
-        <div class="salah-cell" onclick="cycleSalah('maghrib')"><div class="salah-label">Maghrib</div><span class="salah-emoji" id="salah-maghrib">—</span></div>
-        <div class="salah-cell" onclick="cycleSalah('isha')"><div class="salah-label">Isha</div><span class="salah-emoji" id="salah-isha">—</span></div>
-    </div>
-    <div class="metric-row">
-        <span class="metric-label">Qur'an pages</span>
-        <input type="number" class="metric-input" id="quran-pages" placeholder="0" min="0">
-    </div>
-    <div class="check-row" onclick="toggleCheck(this,'deen')"><div class="check-box"></div><span class="check-label">Morning adhkar</span></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Evening adhkar</span></div>
-</div>
-
-<!-- CAPTURE -->
-<div class="section s-capture">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
-        <span class="section-title">Capture</span>
-        <span class="section-sub">Clear your mind</span>
-    </div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Brain dumped to inbox</span></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Tomorrow planned</span></div>
-</div>
-
-<!-- LOG -->
-<div class="section s-log">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <span class="section-title">Log</span>
-        <span class="section-sub">Rapid bullets</span>
+    <div class="section s-deen">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+            <span class="section-title">Deen</span>
+            <span class="section-sub">Foundation first</span>
+        </div>
+        <div class="salah-legend">
+            <div class="legend-item">⏰ On time</div>
+            <div class="legend-item">🕌 Masjid</div>
+            <div class="legend-item">⏳ Late</div>
+            <div class="legend-item">❌ Missed</div>
+        </div>
+        <div class="salah-grid">
+            <div class="salah-cell" onclick="cycleSalah('fajr')"><div class="salah-label">Fajr</div><span class="salah-emoji" id="salah-fajr">—</span></div>
+            <div class="salah-cell" onclick="cycleSalah('dhuhr')"><div class="salah-label">Dhuhr</div><span class="salah-emoji" id="salah-dhuhr">—</span></div>
+            <div class="salah-cell" onclick="cycleSalah('asr')"><div class="salah-label">Asr</div><span class="salah-emoji" id="salah-asr">—</span></div>
+            <div class="salah-cell" onclick="cycleSalah('maghrib')"><div class="salah-label">Maghrib</div><span class="salah-emoji" id="salah-maghrib">—</span></div>
+            <div class="salah-cell" onclick="cycleSalah('isha')"><div class="salah-label">Isha</div><span class="salah-emoji" id="salah-isha">—</span></div>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Qur'an pages</span>
+            <input type="number" class="metric-input" id="quran-pages" placeholder="0" min="0">
+        </div>
+        <div class="check-row" onclick="toggleCheck(this,'deen')"><div class="check-box"></div><span class="check-label">Morning adhkar</span></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Evening adhkar</span></div>
     </div>
 
-    <span class="sub-label career">▸ Career</span>
-    <div class="check-row" onclick="toggleCheck(this,'career')"><div class="check-box"></div><span class="check-label">Deep work hour</span></div>
-    <div class="metric-row"><span class="metric-label">Quality (1–3)</span><input type="number" class="metric-input" id="work-quality" placeholder="0" min="0" max="3"></div>
-
-    <span class="sub-label body">▸ Body</span>
-    <div class="check-row" onclick="toggleCheck(this,'body')"><div class="check-box"></div><span class="check-label">Workout</span></div>
-    <div class="metric-row"><span class="metric-label">Sleep time</span><input type="text" class="metric-input wide" id="sleep-time" placeholder="11:30 PM"></div>
-    <div class="metric-row"><span class="metric-label">Sleep hours</span><input type="number" class="metric-input" id="sleep-hours" placeholder="7" min="0" max="24" step="0.5"></div>
-    <div class="metric-row"><span class="metric-label">Energy (1–3)</span><input type="number" class="metric-input" id="energy" placeholder="0" min="0" max="3"></div>
-
-    <span class="sub-label build">▸ Build</span>
-    <div class="check-row" onclick="toggleCheck(this,'build')"><div class="check-box"></div><span class="check-label">Levela progress</span></div>
-    <div class="metric-row"><span class="metric-label">Project hours</span><input type="number" class="metric-input" id="project-hours" placeholder="2" min="0" step="0.5"></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shipped something</span></div>
-
-    <span class="sub-label bonds">▸ Bonds</span>
-    <div class="check-row" onclick="toggleCheck(this,'bonds')"><div class="check-box"></div><span class="check-label">Quality family time</span></div>
-    <div class="metric-row"><span class="metric-label">Family hours</span><input type="number" class="metric-input" id="family-hours" placeholder="3" min="0" step="0.5"></div>
-</div>
-
-<!-- IDENTITY -->
-<div class="section s-identity">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="section-title">Identity</span>
-        <span class="section-sub">Who I'm becoming</span>
+    <div class="section s-capture">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+            <span class="section-title">Capture</span>
+            <span class="section-sub">Clear your mind</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Brain dumped to inbox</span></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Tomorrow planned</span></div>
     </div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Prioritises worship</span></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Ships consistently</span></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Protects health</span></div>
-    <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shows up for family</span></div>
-</div>
 
-<!-- REFLECT -->
-<div class="section s-reflect">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
-        <span class="section-title">Reflect</span>
-        <span class="section-sub">Clarity</span>
-    </div>
-    <div class="text-block">
-        <span class="text-label">🏆 Today's win</span>
-        <textarea id="win-today" placeholder="What went well today?"></textarea>
-        <span class="text-label">🎯 Tomorrow's ONE thing</span>
-        <input type="text" id="tomorrow-one-thing" placeholder="Your top priority tomorrow">
-        <span class="text-label">💡 Insight / learning</span>
-        <textarea id="insight-learning" placeholder="What did you learn today?"></textarea>
-    </div>
-</div>
+    <div class="section s-log">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <span class="section-title">Log</span>
+            <span class="section-sub">Rapid bullets</span>
+        </div>
 
-<!-- SCORE -->
-<div class="section s-score">
-    <div class="section-header">
-        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <span class="section-title">Score</span>
-        <span class="section-sub">Rate your day</span>
-    </div>
-    <div class="stars-wrap">
-        <span class="star" onclick="setRating(1)">★</span>
-        <span class="star" onclick="setRating(2)">★</span>
-        <span class="star" onclick="setRating(3)">★</span>
-        <span class="star" onclick="setRating(4)">★</span>
-        <span class="star" onclick="setRating(5)">★</span>
-    </div>
-</div>
+        <span class="sub-label career">▸ Career</span>
+        <div class="check-row" onclick="toggleCheck(this,'career')"><div class="check-box"></div><span class="check-label">Deep work hour</span></div>
+        <div class="metric-row"><span class="metric-label">Quality (1–3)</span><input type="number" class="metric-input" id="work-quality" placeholder="0" min="0" max="3"></div>
 
+        <span class="sub-label body">▸ Body</span>
+        <div class="check-row" onclick="toggleCheck(this,'body')"><div class="check-box"></div><span class="check-label">Workout</span></div>
+        <div class="metric-row"><span class="metric-label">Sleep time</span><input type="text" class="metric-input wide" id="sleep-time" placeholder="11:30 PM"></div>
+        <div class="metric-row"><span class="metric-label">Sleep hours</span><input type="number" class="metric-input" id="sleep-hours" placeholder="7" min="0" max="24" step="0.5"></div>
+        <div class="metric-row">
+            <span class="metric-label">Energy</span>
+            <div class="pips-row" id="energy-pips">
+                <div class="pip" onclick="setEnergy(1)"></div>
+                <div class="pip" onclick="setEnergy(2)"></div>
+                <div class="pip" onclick="setEnergy(3)"></div>
+                <div class="pip" onclick="setEnergy(4)"></div>
+                <div class="pip" onclick="setEnergy(5)"></div>
+            </div>
+        </div>
+
+        <span class="sub-label build">▸ Build</span>
+        <div class="check-row build-only" onclick="toggleCheck(this,'build')"><div class="check-box"></div><span class="check-label">Levela progress</span></div>
+        <div class="metric-row build-only"><span class="metric-label">Project hours</span><input type="number" class="metric-input" id="project-hours" placeholder="2" min="0" step="0.5"></div>
+        <div class="check-row build-only" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shipped something</span></div>
+
+        <span class="sub-label bonds">▸ Bonds</span>
+        <div class="check-row" onclick="toggleCheck(this,'bonds')"><div class="check-box"></div><span class="check-label">Quality family time</span></div>
+        <div class="metric-row"><span class="metric-label">Family hours</span><input type="number" class="metric-input" id="family-hours" placeholder="3" min="0" step="0.5"></div>
+    </div>
+
+    <div class="section s-identity">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <span class="section-title">Identity</span>
+            <span class="section-sub">Who I'm becoming</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Prioritises worship</span></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Ships consistently</span></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Protects health</span></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">Shows up for family</span></div>
+    </div>
+
+    <div class="section s-reflect">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+            <span class="section-title">Reflect</span>
+            <span class="section-sub">Clarity</span>
+        </div>
+        <div class="text-block">
+            <span class="text-label">🏆 Today's win</span>
+            <textarea id="win-today" placeholder="What went well today?"></textarea>
+            <span class="text-label">🎯 Tomorrow's ONE thing</span>
+            <input type="text" id="tomorrow-one-thing" placeholder="Your top priority tomorrow">
+            <span class="text-label">💡 Insight / learning</span>
+            <textarea id="insight-learning" placeholder="What did you learn today?"></textarea>
+        </div>
+    </div>
+
+    <div class="section s-score">
+        <div class="section-header">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <span class="section-title">Score</span>
+            <span class="section-sub">Rate your day</span>
+        </div>
+        <div class="stars-wrap">
+            <span class="star" onclick="setRating(1)">★</span>
+            <span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span>
+            <span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+        </div>
+    </div>
 
 </div>
 
@@ -672,26 +748,95 @@
 <div class="toast" id="toast"></div>
 
 <script>
-    const today   = new Date();
-    const todayStr = today.toISOString().split('T')[0];
-
-    document.getElementById('headerDate').textContent =
-        today.toLocaleDateString('en-GB', { weekday:'long' }).toUpperCase();
-    document.getElementById('headerDay').textContent =
-        today.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
-
-    const pillarState = { deen:false, career:false, body:false, build:false, bonds:false };
-
-    function updateProgress() {
-        Object.keys(pillarState).forEach(p => {
-            const el = document.getElementById('p-' + p);
-            if (el) el.classList.toggle('done', pillarState[p]);
-        });
-        checkNagDismiss();
+    function ymd(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
     }
 
+    function dateKey(d) { return 'dt:' + ymd(d); }
+
+    function defaultDayType(d) {
+        const day = d.getDay();
+        return (day === 3 || day === 4) ? 'office' : 'build';
+    }
+
+    (function migrate() {
+        const old = localStorage.getItem('daily-tracker');
+        if (old) {
+            try {
+                const d = JSON.parse(old);
+                if (d && d.date) {
+                    const key = 'dt:' + d.date;
+                    if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(d));
+                }
+            } catch (e) {}
+            localStorage.removeItem('daily-tracker');
+        }
+    })();
+
+    const realToday = new Date();
+    realToday.setHours(0,0,0,0);
+
+    let currentDate = new Date(realToday);
+    let currentDayType = defaultDayType(currentDate);
+
     const salahEmojis = ['—','⏰','🕌','⏳','❌'];
-    const salahStates = { fajr:0, dhuhr:0, asr:0, maghrib:0, isha:0 };
+    let salahStates = { fajr:0, dhuhr:0, asr:0, maghrib:0, isha:0 };
+    const pillarState = { deen:false, career:false, body:false, build:false, bonds:false };
+    let energyLevel = 0;
+
+    function setEnergy(n) {
+        energyLevel = (energyLevel === n) ? 0 : n; // tap active pip again to clear
+        document.querySelectorAll('#energy-pips .pip').forEach((p,i) => p.classList.toggle('active', i < energyLevel));
+        saveData();
+    }
+
+    function renderHeader() {
+        const isToday = ymd(currentDate) === ymd(realToday);
+        document.getElementById('headerDate').textContent =
+            currentDate.toLocaleDateString('en-GB', { weekday:'long' }).toUpperCase();
+        document.getElementById('headerDay').textContent =
+            currentDate.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('todayLink').classList.toggle('show', !isToday);
+    }
+
+    function changeDate(delta) {
+        currentDate.setDate(currentDate.getDate() + delta);
+        loadDayData();
+    }
+
+    function goToday() {
+        currentDate = new Date(realToday);
+        loadDayData();
+    }
+
+    function setDayType(type) {
+        currentDayType = type;
+        document.getElementById('btn-build').classList.toggle('active', type === 'build');
+        document.getElementById('btn-office').classList.toggle('active', type === 'office');
+        document.querySelectorAll('.build-only').forEach(el => {
+            el.classList.toggle('hidden-day', type === 'office');
+        });
+        updateRing();
+        saveData();
+    }
+
+    const RING_CIRC = 2 * Math.PI * 15.5;
+
+    function updateRing() {
+        const keys = Object.keys(pillarState);
+        const applicable = currentDayType === 'office' ? keys.filter(k => k !== 'build') : keys;
+        const done = applicable.filter(k => pillarState[k]).length;
+        const pct = applicable.length ? Math.round((done / applicable.length) * 100) : 0;
+
+        const fill = document.getElementById('ringFill');
+        fill.style.strokeDasharray = RING_CIRC;
+        fill.style.strokeDashoffset = RING_CIRC * (1 - pct / 100);
+        fill.classList.toggle('complete', pct === 100);
+        document.getElementById('ringText').textContent = pct + '%';
+    }
 
     function cycleSalah(p) {
         salahStates[p] = (salahStates[p] + 1) % salahEmojis.length;
@@ -704,7 +849,11 @@
         const on  = !box.classList.contains('checked');
         box.classList.toggle('checked', on);
         row.classList.toggle('done-row', on);
-        if (pillar) { pillarState[pillar] = on; updateProgress(); }
+        if (pillar) {
+            pillarState[pillar] = on;
+            updateRing();
+            checkNagDismiss();
+        }
         saveData();
     }
 
@@ -718,7 +867,8 @@
         const boxes = document.querySelectorAll('.check-box');
         const c = i => boxes[i].classList.contains('checked');
         const data = {
-            date: todayStr,
+            date: ymd(currentDate),
+            dayType: currentDayType,
             salah_fajr:    salahEmojis[salahStates.fajr],
             salah_dhuhr:   salahEmojis[salahStates.dhuhr],
             salah_asr:     salahEmojis[salahStates.asr],
@@ -732,12 +882,12 @@
             workout:          c(5),
             sleep_time:    document.getElementById('sleep-time').value || '',
             sleep_hours:   document.getElementById('sleep-hours').value || 0,
-            energy:        document.getElementById('energy').value || 0,
+            energy:        energyLevel,
             levela:           c(6),
             project_hours: document.getElementById('project-hours').value || 0,
             shipped:          c(7),
             family_time:      c(8),
-            family_hours:  document.getElementById('family-hours').value || 0,
+            family_hours: document.getElementById('family-hours').value || 0,
             prioritizes_worship: c(9),  ships_consistently: c(10),
             protects_health:     c(11), shows_up_family:    c(12),
             win_today:          document.getElementById('win-today').value || '',
@@ -745,84 +895,125 @@
             insight_learning:   document.getElementById('insight-learning').value || '',
             day_rating:         document.querySelectorAll('.star.active').length || 0
         };
-        localStorage.setItem('daily-tracker', JSON.stringify(data));
+        localStorage.setItem(dateKey(currentDate), JSON.stringify(data));
         const dot = document.getElementById('saveDot');
         dot.classList.add('show');
         clearTimeout(saveTid);
         saveTid = setTimeout(() => dot.classList.remove('show'), 1500);
     }
 
-    function loadData() {
-        const saved = localStorage.getItem('daily-tracker');
-        if (!saved) return;
-        const d = JSON.parse(saved);
-        if (d.date !== todayStr) return;
+    function resetUI() {
+        salahStates = { fajr:0, dhuhr:0, asr:0, maghrib:0, isha:0 };
+        Object.keys(salahStates).forEach(p => document.getElementById('salah-' + p).textContent = '—');
+        Object.keys(pillarState).forEach(k => pillarState[k] = false);
 
-        Object.keys(salahStates).forEach(p => {
-            const idx = salahEmojis.indexOf(d['salah_' + p]);
-            if (idx !== -1) { salahStates[p] = idx; document.getElementById('salah-' + p).textContent = salahEmojis[idx]; }
-        });
+        document.querySelectorAll('.check-box').forEach(b => b.classList.remove('checked'));
+        document.querySelectorAll('.check-row').forEach(r => r.classList.remove('done-row'));
+        document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+        energyLevel = 0;
+        document.querySelectorAll('#energy-pips .pip').forEach(p => p.classList.remove('active'));
 
-        const set = (id, val) => { if (val) document.getElementById(id).value = val; };
-        set('quran-pages', d.quran_pages);
-        set('work-quality', d.work_quality);
-        set('sleep-time', d.sleep_time);
-        set('sleep-hours', d.sleep_hours);
-        set('energy', d.energy);
-        set('project-hours', d.project_hours);
-        set('family-hours', d.family_hours);
-        set('win-today', d.win_today);
-        set('tomorrow-one-thing', d.tomorrow_one_thing);
-        set('insight-learning', d.insight_learning);
-
-        const map = [
-            [0, d.adhkar_morning,      'deen'],
-            [1, d.adhkar_evening,       null],
-            [2, d.inbox_cleared,        null],
-            [3, d.tomorrow_planned,     null],
-            [4, d.deep_work,           'career'],
-            [5, d.workout,             'body'],
-            [6, d.levela,              'build'],
-            [7, d.shipped,              null],
-            [8, d.family_time,         'bonds'],
-            [9, d.prioritizes_worship,  null],
-            [10,d.ships_consistently,   null],
-            [11,d.protects_health,      null],
-            [12,d.shows_up_family,      null],
-        ];
-
-        const boxes = document.querySelectorAll('.check-box');
-        const rows  = document.querySelectorAll('.check-row');
-
-        map.forEach(([i, val, pillar]) => {
-            if (val) {
-                boxes[i].classList.add('checked');
-                rows[i].classList.add('done-row');
-                if (pillar) pillarState[pillar] = true;
-            }
-        });
-
-        for (let i = 0; i < d.day_rating; i++) document.querySelectorAll('.star')[i].classList.add('active');
-        updateProgress();
+        ['quran-pages','work-quality','sleep-time','sleep-hours','project-hours','family-hours','win-today','tomorrow-one-thing','insight-learning']
+            .forEach(id => document.getElementById(id).value = '');
     }
 
-    // Nag
+    function loadDayData() {
+        resetUI();
+        renderHeader();
+
+        const saved = localStorage.getItem(dateKey(currentDate));
+        let dayType = defaultDayType(currentDate);
+
+        if (saved) {
+            const d = JSON.parse(saved);
+            if (d.dayType) dayType = d.dayType;
+
+            Object.keys(salahStates).forEach(p => {
+                const idx = salahEmojis.indexOf(d['salah_' + p]);
+                if (idx !== -1) { salahStates[p] = idx; document.getElementById('salah-' + p).textContent = salahEmojis[idx]; }
+            });
+
+            const set = (id, val) => { if (val !== undefined && val !== null && val !== '') document.getElementById(id).value = val; };
+            set('quran-pages', d.quran_pages);
+            set('work-quality', d.work_quality);
+            set('sleep-time', d.sleep_time);
+            set('sleep-hours', d.sleep_hours);
+            set('project-hours', d.project_hours);
+            set('family-hours', d.family_hours);
+            set('win-today', d.win_today);
+            set('tomorrow-one-thing', d.tomorrow_one_thing);
+            set('insight-learning', d.insight_learning);
+
+            energyLevel = d.energy || 0;
+            document.querySelectorAll('#energy-pips .pip').forEach((p,i) => p.classList.toggle('active', i < energyLevel));
+
+            const map = [
+                [0, d.adhkar_morning,      'deen'],
+                [1, d.adhkar_evening,       null],
+                [2, d.inbox_cleared,        null],
+                [3, d.tomorrow_planned,     null],
+                [4, d.deep_work,           'career'],
+                [5, d.workout,             'body'],
+                [6, d.levela,              'build'],
+                [7, d.shipped,              null],
+                [8, d.family_time,         'bonds'],
+                [9, d.prioritizes_worship,  null],
+                [10,d.ships_consistently,   null],
+                [11,d.protects_health,      null],
+                [12,d.shows_up_family,      null],
+            ];
+
+            const boxes = document.querySelectorAll('.check-box');
+            const rows  = document.querySelectorAll('.check-row');
+
+            map.forEach(([i, val, pillar]) => {
+                if (val) {
+                    boxes[i].classList.add('checked');
+                    rows[i].classList.add('done-row');
+                    if (pillar) pillarState[pillar] = true;
+                }
+            });
+
+            for (let i = 0; i < (d.day_rating || 0); i++) document.querySelectorAll('.star')[i].classList.add('active');
+        }
+
+        currentDayType = dayType;
+        document.getElementById('btn-build').classList.toggle('active', dayType === 'build');
+        document.getElementById('btn-office').classList.toggle('active', dayType === 'office');
+        document.querySelectorAll('.build-only').forEach(el => el.classList.toggle('hidden-day', dayType === 'office'));
+
+        updateRing();
+
+        const existingNag = document.getElementById('levela-nag');
+        if (existingNag) existingNag.remove();
+        if (ymd(currentDate) === ymd(realToday)) {
+            setTimeout(showNag, 500);
+        }
+    }
+
     const PL = { deen:'Deen', career:'Career', body:'Body', build:'Build', bonds:'Bonds' };
-    const getMissing = () => Object.keys(pillarState).filter(p => !pillarState[p]).map(p => PL[p]);
+
+    function getMissing() {
+        const keys = Object.keys(pillarState);
+        const applicable = currentDayType === 'office' ? keys.filter(k => k !== 'build') : keys;
+        return applicable.filter(k => !pillarState[k]).map(k => PL[k]);
+    }
 
     function checkNagDismiss() {
         if (getMissing().length === 0) { const n = document.getElementById('levela-nag'); if (n) n.remove(); }
     }
 
     function showNag() {
+        if (ymd(currentDate) !== ymd(realToday)) return;
         const missing = getMissing();
         if (!missing.length) return;
+        const total = currentDayType === 'office' ? 4 : 5;
         const el = document.createElement('div');
         el.id = 'levela-nag';
         el.innerHTML =
             '<div class="nag-card">' +
-            '<span class="nag-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span>' +
-            '<p class="nag-title">' + (missing.length === 5 ? 'Tracker not filled in today' : 'Still to tick today') + '</p>' +
+            '<div class="nag-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>' +
+            '<p class="nag-title">' + (missing.length === total ? 'Tracker not filled in today' : 'Still to tick today') + '</p>' +
             '<p class="nag-sub">' + missing.length + ' pillar' + (missing.length > 1 ? 's' : '') + ' incomplete — takes under 2 minutes</p>' +
             '<ul class="nag-list">' + missing.map(p => '<li class="nag-item">' + p + '</li>').join('') + '</ul>' +
             '<button class="nag-btn" onclick="document.getElementById(\'levela-nag\').remove()">Let me fill it in →</button>' +
@@ -831,15 +1022,16 @@
     }
 
     function generateMarkdown() {
-        const saved = localStorage.getItem('daily-tracker');
+        const saved = localStorage.getItem(dateKey(currentDate));
         if (!saved) { showToast('⚠️ No data to export'); return null; }
         const d = JSON.parse(saved);
-        const dt = new Date(d.date);
+        const dt = currentDate;
         const dayName  = dt.toLocaleDateString('en-GB', { weekday:'long' });
         const fullDate = dt.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
         return `---
 date: ${d.date}
 day: ${dayName}
+day_type: ${d.dayType || ''}
 salah_fajr: "${d.salah_fajr}"
 salah_dhuhr: "${d.salah_dhuhr}"
 salah_asr: "${d.salah_asr}"
@@ -871,7 +1063,7 @@ insight_learning: "${d.insight_learning}"
 day_rating: ${d.day_rating}
 ---
 
-# ${dayName}, ${fullDate}
+# ${dayName}, ${fullDate} ${d.dayType ? '(' + d.dayType + ' day)' : ''}
 
 ## 🕌 Deen
 Fajr ${d.salah_fajr} | Dhuhr ${d.salah_dhuhr} | Asr ${d.salah_asr} | Maghrib ${d.salah_maghrib} | Isha ${d.salah_isha}
@@ -882,9 +1074,8 @@ Pages: ${d.quran_pages} | [${d.adhkar_morning?'x':' '}] Morning adhkar | [${d.ad
 
 ## 📊 Log
 **Career:** [${d.deep_work?'x':' '}] Deep work · Quality ${d.work_quality}/3
-**Body:** [${d.workout?'x':' '}] Workout · ${d.sleep_hours}h sleep at ${d.sleep_time} · Energy ${d.energy}/3
-**Build:** [${d.levela?'x':' '}] Levela · ${d.project_hours}h · [${d.shipped?'x':' '}] Shipped
-**Bonds:** [${d.family_time?'x':' '}] Family · ${d.family_hours}h
+**Body:** [${d.workout?'x':' '}] Workout · ${d.sleep_hours}h sleep at ${d.sleep_time} · Energy ${d.energy}/5
+${d.dayType === 'office' ? '' : '**Build:** [' + (d.levela?'x':' ') + '] Levela · ' + d.project_hours + 'h · [' + (d.shipped?'x':' ') + '] Shipped' + String.fromCharCode(10)}**Bonds:** [${d.family_time?'x':' '}] Family · ${d.family_hours}h
 
 ## 💪 Identity
 [${d.prioritizes_worship?'x':' '}] Worship | [${d.ships_consistently?'x':' '}] Ships | [${d.protects_health?'x':' '}] Health | [${d.shows_up_family?'x':' '}] Family
@@ -915,11 +1106,10 @@ Pages: ${d.quran_pages} | [${d.adhkar_morning?'x':' '}] Morning adhkar | [${d.ad
     function downloadMarkdown() {
         const md = generateMarkdown();
         if (!md) return;
-        const d = JSON.parse(localStorage.getItem('daily-tracker'));
         const blob = new Blob([md], { type:'text/markdown;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url; a.download = d.date + '.md'; a.click();
+        a.href = url; a.download = ymd(currentDate) + '.md'; a.click();
         URL.revokeObjectURL(url);
         showToast('💾 Downloaded');
     }
@@ -931,9 +1121,7 @@ Pages: ${d.quran_pages} | [${d.adhkar_morning?'x':' '}] Morning adhkar | [${d.ad
     }
 
     document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', saveData));
-    loadData();
-    setTimeout(showNag, 900);
+    loadDayData();
 </script>
-
 </body>
 </html>
