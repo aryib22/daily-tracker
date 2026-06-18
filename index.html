@@ -32,6 +32,7 @@
             --c-identity:#6ee7b7;
             --c-reflect: #fcd34d;
             --c-score:   #fb923c;
+            --c-schedule:#93c5fd;
             --radius-sm: 10px;
             --radius-md: 14px;
             --radius-lg: 20px;
@@ -241,6 +242,103 @@
         .s-reflect  .section-title { color: var(--c-reflect); }
         .s-score    .section-icon { background: rgba(251,146,60,0.12); }
         .s-score    .section-title { color: var(--c-score); }
+
+        /* ── SCHEDULE ───────────────────────────────────────────── */
+        .s-schedule .section-icon { background: rgba(147,197,253,0.12); }
+        .s-schedule .section-title { color: var(--c-schedule); }
+
+        .schedule-header { cursor: pointer; }
+
+        .schedule-chevron {
+            color: var(--text-3);
+            flex-shrink: 0;
+            margin-left: 6px;
+            transition: transform 0.25s ease;
+        }
+
+        .schedule-chevron.open { transform: rotate(180deg); }
+
+        .schedule-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .schedule-body.open { /* max-height set dynamically via JS */ }
+
+        .schedule-note {
+            padding: 13px 20px;
+            font-size: 12px;
+            color: var(--text-3);
+            line-height: 1.6;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .schedule-anchors {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .anchor-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .anchor-name {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 4px;
+        }
+
+        .anchor-time { font-size: 13px; font-weight: 700; color: var(--text-1); }
+
+        .sched-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sched-time {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-2);
+            width: 64px;
+            flex-shrink: 0;
+            padding-top: 1px;
+        }
+
+        .sched-block {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-1);
+            line-height: 1.4;
+        }
+
+        .sched-pills {
+            display: flex;
+            gap: 4px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .sched-pill {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 99px;
+            letter-spacing: 0.03em;
+        }
 
         .salah-legend {
             display: grid;
@@ -620,6 +718,26 @@
 
 <div class="container">
 
+    <div class="section s-schedule">
+        <div class="section-header schedule-header" onclick="toggleSchedule()">
+            <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <span class="section-title">Schedule</span>
+            <span class="section-sub" id="scheduleSub">—</span>
+            <svg class="schedule-chevron" id="scheduleChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="schedule-body" id="scheduleBody">
+            <div class="schedule-note">Caffeine off by 1pm. The midday nap is the second half of your sleep — not optional, especially on office days. Prayer times shift from late July as nights lengthen.</div>
+            <div class="schedule-anchors">
+                <div class="anchor-item"><div class="anchor-name">Fajr</div><div class="anchor-time">3:45</div></div>
+                <div class="anchor-item"><div class="anchor-name">Dhuhr</div><div class="anchor-time">~1:10</div></div>
+                <div class="anchor-item"><div class="anchor-name">Asr</div><div class="anchor-time">~5:30</div></div>
+                <div class="anchor-item"><div class="anchor-name">Maghrib</div><div class="anchor-time">~9:25</div></div>
+                <div class="anchor-item"><div class="anchor-name">Isha</div><div class="anchor-time">~9:25</div></div>
+            </div>
+            <div id="scheduleRows"></div>
+        </div>
+    </div>
+
     <div class="section s-deen">
         <div class="section-header">
             <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
@@ -787,6 +905,105 @@
     const pillarState = { deen:false, career:false, body:false, build:false, bonds:false };
     let energyLevel = 0;
 
+    /* ── SCHEDULE ─────────────────────────────────────────────── */
+    const SCHEDULES = {
+        build: [
+            ['3:15',     'Wake, wudu', 'Body'],
+            ['3:45',     'Fajr Jamat at mosque, home ~4:15', 'Deen'],
+            ['4:15–6:15','Levela deep block', 'Build'],
+            ['6:30–7:30','Gym', 'Body'],
+            ['7:30–8:30','Shower, breakfast, kids, morning moment', 'Bonds'],
+            ['9:00–1:00','Work', 'Career'],
+            ['1:00',     'Dhuhr, lunch, 25m nap', 'Deen / Body'],
+            ['2:00–5:00','Work', 'Career'],
+            ['5:30',     'Asr, then kids and family', 'Deen / Bonds'],
+            ['9:25',     'Maghrib + Isha combined', 'Deen'],
+            ['9:45',     'Wind down, screens off', 'Body'],
+            ['10:45',    'Sleep', 'Body']
+        ],
+        office: [
+            ['3:15',     'Wake, wudu', 'Body'],
+            ['3:45',     'Fajr Jamat at mosque, home ~4:15', 'Deen'],
+            ['4:15–4:55','Breakfast, prep, light admin only', 'Career'],
+            ['5:00',     'Leave for office', 'Career'],
+            ['Midday',   'Dhuhr, then a real nap', 'Deen / Body'],
+            ['In day',   'Asr at work', 'Deen'],
+            ['6:00',     'Home, dinner, kids, family hour', 'Bonds'],
+            ['9:25',     'Maghrib + Isha combined', 'Deen'],
+            ['10:45',    'Sleep', 'Body']
+        ],
+        saturday: [
+            ['3:45',     'Fajr Jamat', 'Deen'],
+            ['4:30–7:30','Recovery sleep (clear the week\'s debt)', 'Body'],
+            ['Morning',  'Volunteering at Huda, 4h', 'Deen'],
+            ['Midday',   'Kids teaching, ~2h (they\'re fresh)', 'Bonds'],
+            ['Aft / eve','Family, admin, chores, shopping', 'Bonds / Admin'],
+            ['9:25',     'Maghrib + Isha', 'Deen']
+        ],
+        sunday: [
+            ['3:45',     'Fajr Jamat', 'Deen'],
+            ['4:30–7:30','Recovery sleep', 'Body'],
+            ['Morning',  'Kids teaching, ~2h', 'Bonds'],
+            ['Early aft','Kids teaching, ~1h', 'Bonds'],
+            ['Afternoon','Family, household reset, week prep', 'Bonds / Admin'],
+            ['9:25',     'Maghrib + Isha', 'Deen']
+        ]
+    };
+
+    const SCHEDULE_LABELS = { build:'Build day', office:'Office day', saturday:'Saturday', sunday:'Sunday' };
+
+    const PILLAR_COLORS = {
+        Deen:   '#c084fc',
+        Career: '#60a5fa',
+        Body:   '#fb923c',
+        Build:  '#2dd4bf',
+        Bonds:  '#f472b6',
+        Admin:  '#8a9bb8'
+    };
+
+    function getScheduleKey(date) {
+        const day = date.getDay(); // 0=Sun .. 6=Sat
+        if (day === 0) return 'sunday';
+        if (day === 6) return 'saturday';
+        if (day === 3 || day === 4) return 'office';
+        return 'build'; // Mon, Tue, Fri
+    }
+
+    function renderSchedule() {
+        const key = getScheduleKey(currentDate);
+        const rows = SCHEDULES[key];
+
+        document.getElementById('scheduleSub').textContent = SCHEDULE_LABELS[key];
+
+        document.getElementById('scheduleRows').innerHTML = rows.map(([time, block, pillars]) => {
+            const pills = pillars.split('/').map(p => p.trim()).map(p => {
+                const color = PILLAR_COLORS[p] || '#8a9bb8';
+                return '<span class="sched-pill" style="background:' + color + '22; color:' + color + '">' + p + '</span>';
+            }).join('');
+            return '<div class="sched-row"><div class="sched-time">' + time + '</div><div class="sched-block">' + block + '<div class="sched-pills">' + pills + '</div></div></div>';
+        }).join('');
+
+        const body = document.getElementById('scheduleBody');
+        if (body.classList.contains('open')) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+        }
+    }
+
+    function toggleSchedule() {
+        const body = document.getElementById('scheduleBody');
+        const chevron = document.getElementById('scheduleChevron');
+        const isOpen = body.classList.contains('open');
+
+        if (isOpen) {
+            body.style.maxHeight = '0px';
+            body.classList.remove('open');
+        } else {
+            body.classList.add('open');
+            body.style.maxHeight = body.scrollHeight + 'px';
+        }
+        chevron.classList.toggle('open');
+    }
+
     function setEnergy(n) {
         energyLevel = (energyLevel === n) ? 0 : n; // tap active pip again to clear
         document.querySelectorAll('#energy-pips .pip').forEach((p,i) => p.classList.toggle('active', i < energyLevel));
@@ -920,6 +1137,7 @@
     function loadDayData() {
         resetUI();
         renderHeader();
+        renderSchedule();
 
         const saved = localStorage.getItem(dateKey(currentDate));
         let dayType = defaultDayType(currentDate);
